@@ -23,18 +23,17 @@ uint32_t *image_pixels, int image_width, int image_height)
     int end_y = y2 / pixel_width;
     while (true)
     {
-        int next_clockwiseness = clockwiseness;
-        if (clockwiseness >= 0)
+        int old_clockwiseness = clockwiseness;
+        if (old_clockwiseness >= 0)
         {
             x += x_step;
-            next_clockwiseness += dx_clockwiseness;
+            clockwiseness += dx_clockwiseness;
         }
-        if (clockwiseness <= 0)
+        if (old_clockwiseness <= 0)
         {
             y += y_step;
-            next_clockwiseness += dy_clockwiseness;
+            clockwiseness += dy_clockwiseness;
         }
-        clockwiseness = next_clockwiseness;
 
         // End condition comes first, because we don't want to draw
         // the endpoints of the line.
@@ -87,17 +86,16 @@ uint32_t *image_pixels, int image_width, int image_height)
         if (y >= 0 && y < image_height && x >= 0 && x < image_width)
             image_pixels[y * image_width + x] = color;
 
-        int next_clockwiseness = clockwiseness;
-        if (clockwiseness >= 0)
+        int old_clockwiseness = clockwiseness;
+        if (old_clockwiseness >= 0)
         {
             x += x_step;
-            next_clockwiseness += dx_clockwiseness;
+            clockwiseness += dx_clockwiseness;
         }
-        if (clockwiseness <= 0)
+        if (old_clockwiseness <= 0)
         {
             y += y_step;
-            next_clockwiseness += dy_clockwiseness;
+            clockwiseness += dy_clockwiseness;
         }
-        clockwiseness = next_clockwiseness;
     }
 }

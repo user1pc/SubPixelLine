@@ -87,12 +87,12 @@ Both delta variables are constants, very nice. All we have to do is add those to
     int end_y = y2 / width;
     while (x != end_x || y != end_y) {
         SetPixel(x,y,color);
-        int new_cross = cross_product;
-        if (cross_product >= 0) {
+        int old_cross = cross_product;
+        if (old_cross >= 0) {
             x++;
             cross_product += dx_cross;
         }
-        if (cross_product <= 0) {
+        if (old_cross <= 0) {
             y++;
             cross_product += dy_cross;
         }
