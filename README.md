@@ -104,6 +104,16 @@ Chat about Endpoints
 ===
 One problem I have is the decision to include or exclude the endpoints. There are two functions for drawing a line, one with endpoints included, and one with them excluded. It's also worth mentioning that the endpoints aren't as intuitive as you may think. If you think each pixel endpoint can be calculated as (x,y) = (x1 / width, y1 / width) and (x2 / width, y2 / width), you are in some imaginary world where things work nicely.
 
+The way I want endpoints to be considered can be defined as such:
+
+Look at the line from only one dimension, so from x1 to x2.
+- drawline_include_endpoints() will draw this line over pixel coordinates [floor(min(x1,x2) / width), ceil(max(x1,x2) / width)], inclusive.
+- drawline_exclude_endpoints() will draw this line over pixel coordinates [floor(min(x1,x2) / width + 1), ceil(max(x1,x2) / width) - 1], inclusive.
+
+Now just apply that to 2D. 
+
+Here are some images to show how this can get confusing.
+
 
 <p align="center">
   <img src="./doc_images/endpoints__.png" style="width:500px;"/>
@@ -111,7 +121,7 @@ One problem I have is the decision to include or exclude the endpoints. There ar
 
 - Grey pixels are pixels which most people will agree are to be drawn. When excluding the endpoints, there are no grey pixels on an endpoint. When including an endpoint, these pixels will be drawn even on endpoints. Both drawline_exclude_endpoints() and drawline_include_endpoints() will draw these pixels.
 
-- Green pixels are pixels in which the endpoint of the line lies somewhere inside the pixel, not on the pixels edge. Only drawline_include_endpoints() will draw these pixels.
+- Green pixels are pixels in which the endpoint of the line lies somewhere inside the pixel, not on the pixels edge. Only drawline_include_endpoints() will draw these pixels. [There is some ambiguity/complexity in E-include endpoints, this point actually lies on an edge]
 
 - Blue pixels are the pixel you would get if you were to just floor the coordinates of the endpoint of the line. These pixels do in fact touch the line, but don't intersect it. Neither drawline_exclude_endpoints() or drawline_include_endpoints() will draw these pixels.
 
@@ -129,10 +139,4 @@ To clarify, here are the same images, showing exactly what will be drawn by both
   <img src="./doc_images/endpoints_2.png" style="width:500px;"/>
 </p>
 
-Since it's probably still confusing to understand, I certainly left out some possibly confusing combinations, here is another way to understand which endpoints exactly are drawn:
-
-Look at the line from only one dimension, so from x1 to x2.
-- drawline_include_endpoints() will draw this line over pixel coordinates [floor(min(x1,x2) / width), ceil(max(x1,x2) / width)], inclusive.
-- drawline_exclude_endpoints() will draw this line over pixel coordinates [floor(min(x1,x2) / width + 1), ceil(max(x1,x2) / width) - 1], inclusive.
-
-Now just apply that to 2D. If it still doesn't make sense, it's probably best to create test cases defining exactly what behavior you need, and modify this code until it works.
+If it still doesn't make sense, it's probably best to create test cases defining exactly what behavior you need, and modify this code until it works.
