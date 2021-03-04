@@ -98,4 +98,41 @@ Both delta variables are constants, very nice. All we have to do is add those to
         }
     }
 
-Obviously if width is a power of 2, the divisions and modulos can be optimized.
+Obviously if width is a power of 2, the divisions and modulos can be optimized. Besides optimizing, the algorithm still needs modified to handle all quadrants. I won't bother explaining that here, just go see in the code.
+
+Chat about Endpoints
+===
+One problem I have is the decision to include or exclude the endpoints. There are two functions for drawing a line, one with endpoints included, and one with them excluded. It's also worth mentioning that the endpoints aren't as intuitive as you may think. If you think each pixel endpoint can be calculated as (x,y) = (x1 / width, y1 / width) and (x2 / width, y2 / width), you are in some imaginary world where things work nicely.
+
+
+<p align="center">
+  <img src="./doc_images/endpoints__.png" style="width:500px;"/>
+</p>
+
+- Grey pixels are pixels which most people will agree are to be drawn. When excluding the endpoints, there are no grey pixels on an endpoint. When including an endpoint, these pixels will be drawn even on endpoints. Both drawline_exclude_endpoints() and drawline_include_endpoints() will draw these pixels.
+
+- Green pixels are pixels in which the endpoint of the line lies somewhere inside the pixel, not on the pixels edge. Only drawline_include_endpoints() will draw these pixels.
+
+- Blue pixels are the pixel you would get if you were to just floor the coordinates of the endpoint of the line. These pixels do in fact touch the line, but don't intersect it. Neither drawline_exclude_endpoints() or drawline_include_endpoints() will draw these pixels.
+
+- Orange pixels are pixels which should be considered correct endpoints because they are the pixels which begin and end the line. The distinction between orange and green pixels is that orange pixels are when a line endpoint lies exactly on the edge of a pixel. drawline_include_endpoints() will draw these pixels, but drawline_exclude_endpoints() will not.
+
+- Yellow pixels show an unplesant problem with vertical/horizontal lines. I only want pixels which intersect the line to be drawn. A more specific definition of intersection is this: If a line intersects a pixel, there should be a left and right side of the line each which has a relative area between 0% and 100%, exclusive. The problem with yellow pixels is that the line doesn't just touch a point of the pixel, it lies along the edge of a pixel. Though it goes against my definition of an intersection, I **do** want the yellow pixels to be drawn. Similar behavior with edge cases will apply. For an example, use a line going from (2.3, 0) to (7.8, 0). drawline_include_endpoints() will draw this line over the range [2, 7], inclusive. 
+drawline_exclude_endpoints() will draw this line over the range [3, 6], inclusive.
+For another example, a line from (2.0, 0) to (7.0, 0).
+drawline_include_endpoints() will draw this line over the range [2, 6], inclusive. 
+drawline_exclude_endpoints() will draw this line over the range [3, 5], inclusive.
+
+To clarify, here are the same images, showing exactly what will be drawn by both functions:
+
+<p align="center">
+  <img src="./doc_images/endpoints_2.png" style="width:500px;"/>
+</p>
+
+Since it's probably still confusing to understand, I certainly left out some possibly confusing combinations, here is another way to understand which endpoints exactly are drawn:
+
+Look at the line from only one dimension, so from x1 to x2.
+- drawline_include_endpoints() will draw this line over pixel coordinates [floor(min(x1,x2) / width), ceil(max(x1,x2) / width)], inclusive.
+- drawline_exclude_endpoints() will draw this line over pixel coordinates [floor(min(x1,x2) / width + 1), ceil(max(x1,x2) / width) - 1], inclusive.
+
+Now just apply that to 2D. If it still doesn't make sense, it's probably best to create test cases defining exactly what behavior you need, and modify this code until it works.
