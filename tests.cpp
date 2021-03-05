@@ -991,6 +991,926 @@ TEST(manual_test_bottom_right, DrawLine)
         std::pair<int, int>(7,4),
     });
     EXPECT_FALSE(success);
+
+
+
+    x1 = 5;
+    y1 = 90;
+    x2 = 69;
+    y2 = 74;
+    pixel_width = 4;
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, true, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(1,22),
+        std::pair<int, int>(2,22),
+        std::pair<int, int>(3,22),
+        std::pair<int, int>(3,21),
+        std::pair<int, int>(4,21),
+        std::pair<int, int>(5,21),
+        std::pair<int, int>(6,21),
+        std::pair<int, int>(7,21),
+        std::pair<int, int>(7,20),
+        std::pair<int, int>(8,20),
+        std::pair<int, int>(9,20),
+        std::pair<int, int>(10,20),
+        std::pair<int, int>(11,20),
+        std::pair<int, int>(11,19),
+        std::pair<int, int>(12,19),
+        std::pair<int, int>(13,19),
+        std::pair<int, int>(14,19),
+        std::pair<int, int>(15,19),
+        std::pair<int, int>(15,18),
+        std::pair<int, int>(16,18),
+        std::pair<int, int>(17,18),
+    });
+    EXPECT_TRUE(success);
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, true, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(1,22),
+        std::pair<int, int>(2,22),
+        std::pair<int, int>(3,22),
+        std::pair<int, int>(3,21),
+        std::pair<int, int>(4,21),
+        std::pair<int, int>(5,21),
+        std::pair<int, int>(6,21),
+        std::pair<int, int>(7,21),
+        std::pair<int, int>(7,20),
+        std::pair<int, int>(8,20),
+        std::pair<int, int>(9,20),
+        std::pair<int, int>(10,20),
+        std::pair<int, int>(11,20),
+        std::pair<int, int>(11,19),
+        std::pair<int, int>(12,19),
+        std::pair<int, int>(13,19),
+        std::pair<int, int>(14,19),
+        std::pair<int, int>(15,19),
+        std::pair<int, int>(15,18),
+        std::pair<int, int>(16,18),
+    });
+    EXPECT_FALSE(success);
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, true, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(2,22),
+        std::pair<int, int>(3,22),
+        std::pair<int, int>(3,21),
+        std::pair<int, int>(4,21),
+        std::pair<int, int>(5,21),
+        std::pair<int, int>(6,21),
+        std::pair<int, int>(7,21),
+        std::pair<int, int>(7,20),
+        std::pair<int, int>(8,20),
+        std::pair<int, int>(9,20),
+        std::pair<int, int>(10,20),
+        std::pair<int, int>(11,20),
+        std::pair<int, int>(11,19),
+        std::pair<int, int>(12,19),
+        std::pair<int, int>(13,19),
+        std::pair<int, int>(14,19),
+        std::pair<int, int>(15,19),
+        std::pair<int, int>(15,18),
+        std::pair<int, int>(16,18),
+        std::pair<int, int>(17,18),
+    });
+    EXPECT_FALSE(success);
+
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, false, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(2,22),
+        std::pair<int, int>(3,22),
+        std::pair<int, int>(3,21),
+        std::pair<int, int>(4,21),
+        std::pair<int, int>(5,21),
+        std::pair<int, int>(6,21),
+        std::pair<int, int>(7,21),
+        std::pair<int, int>(7,20),
+        std::pair<int, int>(8,20),
+        std::pair<int, int>(9,20),
+        std::pair<int, int>(10,20),
+        std::pair<int, int>(11,20),
+        std::pair<int, int>(11,19),
+        std::pair<int, int>(12,19),
+        std::pair<int, int>(13,19),
+        std::pair<int, int>(14,19),
+        std::pair<int, int>(15,19),
+        std::pair<int, int>(15,18),
+        std::pair<int, int>(16,18),
+    });
+    EXPECT_TRUE(success);
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, false, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(1,22),
+        std::pair<int, int>(2,22),
+        std::pair<int, int>(3,22),
+        std::pair<int, int>(3,21),
+        std::pair<int, int>(4,21),
+        std::pair<int, int>(5,21),
+        std::pair<int, int>(6,21),
+        std::pair<int, int>(7,21),
+        std::pair<int, int>(7,20),
+        std::pair<int, int>(8,20),
+        std::pair<int, int>(9,20),
+        std::pair<int, int>(10,20),
+        std::pair<int, int>(11,20),
+        std::pair<int, int>(11,19),
+        std::pair<int, int>(12,19),
+        std::pair<int, int>(13,19),
+        std::pair<int, int>(14,19),
+        std::pair<int, int>(15,19),
+        std::pair<int, int>(15,18),
+        std::pair<int, int>(16,18),
+        std::pair<int, int>(17,18),
+    });
+    EXPECT_FALSE(success);
+
+
+
+    x1 = 4;
+    y1 = 90;
+    x2 = 69;
+    y2 = 74;
+    pixel_width = 4;
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, true, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(1,22),
+        std::pair<int, int>(2,22),
+        std::pair<int, int>(3,22),
+        std::pair<int, int>(3,21),
+        std::pair<int, int>(4,21),
+        std::pair<int, int>(5,21),
+        std::pair<int, int>(6,21),
+        std::pair<int, int>(7,21),
+        std::pair<int, int>(7,20),
+        std::pair<int, int>(8,20),
+        std::pair<int, int>(9,20),
+        std::pair<int, int>(10,20),
+        std::pair<int, int>(11,20),
+        std::pair<int, int>(11,19),
+        std::pair<int, int>(12,19),
+        std::pair<int, int>(13,19),
+        std::pair<int, int>(14,19),
+        std::pair<int, int>(15,19),
+        std::pair<int, int>(15,18),
+        std::pair<int, int>(16,18),
+        std::pair<int, int>(17,18),
+    });
+    EXPECT_TRUE(success);
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, true, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(1,22),
+        std::pair<int, int>(2,22),
+        std::pair<int, int>(3,22),
+        std::pair<int, int>(3,21),
+        std::pair<int, int>(4,21),
+        std::pair<int, int>(5,21),
+        std::pair<int, int>(6,21),
+        std::pair<int, int>(7,21),
+        std::pair<int, int>(7,20),
+        std::pair<int, int>(8,20),
+        std::pair<int, int>(9,20),
+        std::pair<int, int>(10,20),
+        std::pair<int, int>(11,20),
+        std::pair<int, int>(11,19),
+        std::pair<int, int>(12,19),
+        std::pair<int, int>(13,19),
+        std::pair<int, int>(14,19),
+        std::pair<int, int>(15,19),
+        std::pair<int, int>(15,18),
+        std::pair<int, int>(16,18)
+    });
+    EXPECT_FALSE(success);
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, true, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(2,22),
+        std::pair<int, int>(3,22),
+        std::pair<int, int>(3,21),
+        std::pair<int, int>(4,21),
+        std::pair<int, int>(5,21),
+        std::pair<int, int>(6,21),
+        std::pair<int, int>(7,21),
+        std::pair<int, int>(7,20),
+        std::pair<int, int>(8,20),
+        std::pair<int, int>(9,20),
+        std::pair<int, int>(10,20),
+        std::pair<int, int>(11,20),
+        std::pair<int, int>(11,19),
+        std::pair<int, int>(12,19),
+        std::pair<int, int>(13,19),
+        std::pair<int, int>(14,19),
+        std::pair<int, int>(15,19),
+        std::pair<int, int>(15,18),
+        std::pair<int, int>(16,18),
+        std::pair<int, int>(17,18),
+    });
+    EXPECT_FALSE(success);
+
+
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, false, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(2,22),
+        std::pair<int, int>(3,22),
+        std::pair<int, int>(3,21),
+        std::pair<int, int>(4,21),
+        std::pair<int, int>(5,21),
+        std::pair<int, int>(6,21),
+        std::pair<int, int>(7,21),
+        std::pair<int, int>(7,20),
+        std::pair<int, int>(8,20),
+        std::pair<int, int>(9,20),
+        std::pair<int, int>(10,20),
+        std::pair<int, int>(11,20),
+        std::pair<int, int>(11,19),
+        std::pair<int, int>(12,19),
+        std::pair<int, int>(13,19),
+        std::pair<int, int>(14,19),
+        std::pair<int, int>(15,19),
+        std::pair<int, int>(15,18),
+        std::pair<int, int>(16,18)
+    });
+    EXPECT_TRUE(success);
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, false, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(1,22),
+        std::pair<int, int>(2,22),
+        std::pair<int, int>(3,22),
+        std::pair<int, int>(3,21),
+        std::pair<int, int>(4,21),
+        std::pair<int, int>(5,21),
+        std::pair<int, int>(6,21),
+        std::pair<int, int>(7,21),
+        std::pair<int, int>(7,20),
+        std::pair<int, int>(8,20),
+        std::pair<int, int>(9,20),
+        std::pair<int, int>(10,20),
+        std::pair<int, int>(11,20),
+        std::pair<int, int>(11,19),
+        std::pair<int, int>(12,19),
+        std::pair<int, int>(13,19),
+        std::pair<int, int>(14,19),
+        std::pair<int, int>(15,19),
+        std::pair<int, int>(15,18),
+        std::pair<int, int>(16,18),
+        std::pair<int, int>(17,18),
+    });
+    EXPECT_FALSE(success);
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, false, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(1,22),
+        std::pair<int, int>(2,22),
+        std::pair<int, int>(3,22),
+        std::pair<int, int>(3,21),
+        std::pair<int, int>(4,21),
+        std::pair<int, int>(5,21),
+        std::pair<int, int>(6,21),
+        std::pair<int, int>(7,21),
+        std::pair<int, int>(7,20),
+        std::pair<int, int>(8,20),
+        std::pair<int, int>(9,20),
+        std::pair<int, int>(10,20),
+        std::pair<int, int>(11,20),
+        std::pair<int, int>(11,19),
+        std::pair<int, int>(12,19),
+        std::pair<int, int>(13,19),
+        std::pair<int, int>(14,19),
+        std::pair<int, int>(15,19),
+        std::pair<int, int>(15,18),
+        std::pair<int, int>(16,18),
+    });
+    EXPECT_FALSE(success);
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, false, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(2,22),
+        std::pair<int, int>(3,22),
+        std::pair<int, int>(3,21),
+        std::pair<int, int>(4,21),
+        std::pair<int, int>(5,21),
+        std::pair<int, int>(6,21),
+        std::pair<int, int>(7,21),
+        std::pair<int, int>(7,20),
+        std::pair<int, int>(8,20),
+        std::pair<int, int>(9,20),
+        std::pair<int, int>(10,20),
+        std::pair<int, int>(11,20),
+        std::pair<int, int>(11,19),
+        std::pair<int, int>(12,19),
+        std::pair<int, int>(13,19),
+        std::pair<int, int>(14,19),
+        std::pair<int, int>(15,19),
+        std::pair<int, int>(15,18),
+        std::pair<int, int>(16,18),
+        std::pair<int, int>(17,18),
+    });
+    EXPECT_FALSE(success);
+
+
+
+    x1 = 7;
+    y1 = 90;
+    x2 = 69;
+    y2 = 74;
+    pixel_width = 4;
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, true, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(1,22),
+        std::pair<int, int>(2,22),
+        std::pair<int, int>(3,22),
+        std::pair<int, int>(3,21),
+        std::pair<int, int>(4,21),
+        std::pair<int, int>(5,21),
+        std::pair<int, int>(6,21),
+        std::pair<int, int>(7,21),
+        std::pair<int, int>(7,20),
+        std::pair<int, int>(8,20),
+        std::pair<int, int>(9,20),
+        std::pair<int, int>(10,20),
+        std::pair<int, int>(11,20),
+        std::pair<int, int>(11,19),
+        std::pair<int, int>(12,19),
+        std::pair<int, int>(13,19),
+        std::pair<int, int>(14,19),
+        std::pair<int, int>(15,19),
+        std::pair<int, int>(15,18),
+        std::pair<int, int>(16,18),
+        std::pair<int, int>(17,18),
+    });
+    EXPECT_TRUE(success);
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, true, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(2,22),
+        std::pair<int, int>(3,22),
+        std::pair<int, int>(3,21),
+        std::pair<int, int>(4,21),
+        std::pair<int, int>(5,21),
+        std::pair<int, int>(6,21),
+        std::pair<int, int>(7,21),
+        std::pair<int, int>(7,20),
+        std::pair<int, int>(8,20),
+        std::pair<int, int>(9,20),
+        std::pair<int, int>(10,20),
+        std::pair<int, int>(11,20),
+        std::pair<int, int>(11,19),
+        std::pair<int, int>(12,19),
+        std::pair<int, int>(13,19),
+        std::pair<int, int>(14,19),
+        std::pair<int, int>(15,19),
+        std::pair<int, int>(15,18),
+        std::pair<int, int>(16,18),
+    });
+    EXPECT_FALSE(success);
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, false, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(1,22),
+        std::pair<int, int>(2,22),
+        std::pair<int, int>(3,22),
+        std::pair<int, int>(3,21),
+        std::pair<int, int>(4,21),
+        std::pair<int, int>(5,21),
+        std::pair<int, int>(6,21),
+        std::pair<int, int>(7,21),
+        std::pair<int, int>(7,20),
+        std::pair<int, int>(8,20),
+        std::pair<int, int>(9,20),
+        std::pair<int, int>(10,20),
+        std::pair<int, int>(11,20),
+        std::pair<int, int>(11,19),
+        std::pair<int, int>(12,19),
+        std::pair<int, int>(13,19),
+        std::pair<int, int>(14,19),
+        std::pair<int, int>(15,19),
+        std::pair<int, int>(15,18),
+        std::pair<int, int>(16,18),
+        std::pair<int, int>(17,18),
+    });
+    EXPECT_FALSE(success);
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, false, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(2,22),
+        std::pair<int, int>(3,22),
+        std::pair<int, int>(3,21),
+        std::pair<int, int>(4,21),
+        std::pair<int, int>(5,21),
+        std::pair<int, int>(6,21),
+        std::pair<int, int>(7,21),
+        std::pair<int, int>(7,20),
+        std::pair<int, int>(8,20),
+        std::pair<int, int>(9,20),
+        std::pair<int, int>(10,20),
+        std::pair<int, int>(11,20),
+        std::pair<int, int>(11,19),
+        std::pair<int, int>(12,19),
+        std::pair<int, int>(13,19),
+        std::pair<int, int>(14,19),
+        std::pair<int, int>(15,19),
+        std::pair<int, int>(15,18),
+        std::pair<int, int>(16,18),
+    });
+    EXPECT_TRUE(success);
+
+
+    x1 = 4;
+    y1 = 88;
+    x2 = 69;
+    y2 = 74;
+    pixel_width = 4;
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, true, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(1,21),
+        std::pair<int, int>(2,21),
+        std::pair<int, int>(3,21),
+        std::pair<int, int>(4,21),
+        std::pair<int, int>(5,21),
+        std::pair<int, int>(5,20),
+        std::pair<int, int>(6,20),
+        std::pair<int, int>(7,20),
+        std::pair<int, int>(8,20),
+        std::pair<int, int>(9,20),
+        std::pair<int, int>(10,20),
+        std::pair<int, int>(10,19),
+        std::pair<int, int>(11,19),
+        std::pair<int, int>(12,19),
+        std::pair<int, int>(13,19),
+        std::pair<int, int>(14,19),
+        std::pair<int, int>(14,18),
+        std::pair<int, int>(15,18),
+        std::pair<int, int>(16,18),
+        std::pair<int, int>(17,18),
+    });
+    EXPECT_TRUE(success);
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, true, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(1,21),
+        std::pair<int, int>(2,21),
+        std::pair<int, int>(3,21),
+        std::pair<int, int>(4,21),
+        std::pair<int, int>(5,21),
+        std::pair<int, int>(5,20),
+        std::pair<int, int>(6,20),
+        std::pair<int, int>(7,20),
+        std::pair<int, int>(8,20),
+        std::pair<int, int>(9,20),
+        std::pair<int, int>(10,20),
+        std::pair<int, int>(10,19),
+        std::pair<int, int>(11,19),
+        std::pair<int, int>(12,19),
+        std::pair<int, int>(13,19),
+        std::pair<int, int>(14,19),
+        std::pair<int, int>(14,18),
+        std::pair<int, int>(15,18),
+        std::pair<int, int>(16,18),
+    });
+    EXPECT_FALSE(success);
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, true, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(2,21),
+        std::pair<int, int>(3,21),
+        std::pair<int, int>(4,21),
+        std::pair<int, int>(5,21),
+        std::pair<int, int>(5,20),
+        std::pair<int, int>(6,20),
+        std::pair<int, int>(7,20),
+        std::pair<int, int>(8,20),
+        std::pair<int, int>(9,20),
+        std::pair<int, int>(10,20),
+        std::pair<int, int>(10,19),
+        std::pair<int, int>(11,19),
+        std::pair<int, int>(12,19),
+        std::pair<int, int>(13,19),
+        std::pair<int, int>(14,19),
+        std::pair<int, int>(14,18),
+        std::pair<int, int>(15,18),
+        std::pair<int, int>(16,18),
+        std::pair<int, int>(17,18),
+    });
+    EXPECT_FALSE(success);
+
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, false, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(1,21),
+        std::pair<int, int>(2,21),
+        std::pair<int, int>(3,21),
+        std::pair<int, int>(4,21),
+        std::pair<int, int>(5,21),
+        std::pair<int, int>(5,20),
+        std::pair<int, int>(6,20),
+        std::pair<int, int>(7,20),
+        std::pair<int, int>(8,20),
+        std::pair<int, int>(9,20),
+        std::pair<int, int>(10,20),
+        std::pair<int, int>(10,19),
+        std::pair<int, int>(11,19),
+        std::pair<int, int>(12,19),
+        std::pair<int, int>(13,19),
+        std::pair<int, int>(14,19),
+        std::pair<int, int>(14,18),
+        std::pair<int, int>(15,18),
+        std::pair<int, int>(16,18),
+        std::pair<int, int>(17,18),
+    });
+    EXPECT_FALSE(success);
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, false, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(2,21),
+        std::pair<int, int>(3,21),
+        std::pair<int, int>(4,21),
+        std::pair<int, int>(5,21),
+        std::pair<int, int>(5,20),
+        std::pair<int, int>(6,20),
+        std::pair<int, int>(7,20),
+        std::pair<int, int>(8,20),
+        std::pair<int, int>(9,20),
+        std::pair<int, int>(10,20),
+        std::pair<int, int>(10,19),
+        std::pair<int, int>(11,19),
+        std::pair<int, int>(12,19),
+        std::pair<int, int>(13,19),
+        std::pair<int, int>(14,19),
+        std::pair<int, int>(14,18),
+        std::pair<int, int>(15,18),
+        std::pair<int, int>(16,18),
+    });
+    EXPECT_TRUE(success);
+
+
+
+    x1 = 4;
+    y1 = 88;
+    x2 = 69;
+    y2 = 72;
+    pixel_width = 4;
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, true, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(1,21),
+        std::pair<int, int>(2,21),
+        std::pair<int, int>(3,21),
+        std::pair<int, int>(4,21),
+        std::pair<int, int>(5,21),
+        std::pair<int, int>(5,20),
+        std::pair<int, int>(6,20),
+        std::pair<int, int>(7,20),
+        std::pair<int, int>(8,20),
+        std::pair<int, int>(9,20),
+        std::pair<int, int>(9,19),
+        std::pair<int, int>(10,19),
+        std::pair<int, int>(11,19),
+        std::pair<int, int>(12,19),
+        std::pair<int, int>(13,19),
+        std::pair<int, int>(13,18),
+        std::pair<int, int>(14,18),
+        std::pair<int, int>(15,18),
+        std::pair<int, int>(16,18),
+        std::pair<int, int>(17,18),
+    });
+    EXPECT_TRUE(success);
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, true, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(1,21),
+        std::pair<int, int>(2,21),
+        std::pair<int, int>(3,21),
+        std::pair<int, int>(4,21),
+        std::pair<int, int>(5,21),
+        std::pair<int, int>(5,20),
+        std::pair<int, int>(6,20),
+        std::pair<int, int>(7,20),
+        std::pair<int, int>(8,20),
+        std::pair<int, int>(9,20),
+        std::pair<int, int>(9,19),
+        std::pair<int, int>(10,19),
+        std::pair<int, int>(11,19),
+        std::pair<int, int>(12,19),
+        std::pair<int, int>(13,19),
+        std::pair<int, int>(13,18),
+        std::pair<int, int>(14,18),
+        std::pair<int, int>(15,18),
+        std::pair<int, int>(16,18),
+    });
+    EXPECT_FALSE(success);
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, true, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(2,21),
+        std::pair<int, int>(3,21),
+        std::pair<int, int>(4,21),
+        std::pair<int, int>(5,21),
+        std::pair<int, int>(5,20),
+        std::pair<int, int>(6,20),
+        std::pair<int, int>(7,20),
+        std::pair<int, int>(8,20),
+        std::pair<int, int>(9,20),
+        std::pair<int, int>(9,19),
+        std::pair<int, int>(10,19),
+        std::pair<int, int>(11,19),
+        std::pair<int, int>(12,19),
+        std::pair<int, int>(13,19),
+        std::pair<int, int>(13,18),
+        std::pair<int, int>(14,18),
+        std::pair<int, int>(15,18),
+        std::pair<int, int>(16,18),
+        std::pair<int, int>(17,18),
+    });
+    EXPECT_FALSE(success);
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, false, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(1,21),
+        std::pair<int, int>(2,21),
+        std::pair<int, int>(3,21),
+        std::pair<int, int>(4,21),
+        std::pair<int, int>(5,21),
+        std::pair<int, int>(5,20),
+        std::pair<int, int>(6,20),
+        std::pair<int, int>(7,20),
+        std::pair<int, int>(8,20),
+        std::pair<int, int>(9,20),
+        std::pair<int, int>(9,19),
+        std::pair<int, int>(10,19),
+        std::pair<int, int>(11,19),
+        std::pair<int, int>(12,19),
+        std::pair<int, int>(13,19),
+        std::pair<int, int>(13,18),
+        std::pair<int, int>(14,18),
+        std::pair<int, int>(15,18),
+        std::pair<int, int>(16,18),
+        std::pair<int, int>(17,18),
+    });
+    EXPECT_FALSE(success);
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, false, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(1,21),
+        std::pair<int, int>(2,21),
+        std::pair<int, int>(3,21),
+        std::pair<int, int>(4,21),
+        std::pair<int, int>(5,21),
+        std::pair<int, int>(5,20),
+        std::pair<int, int>(6,20),
+        std::pair<int, int>(7,20),
+        std::pair<int, int>(8,20),
+        std::pair<int, int>(9,20),
+        std::pair<int, int>(9,19),
+        std::pair<int, int>(10,19),
+        std::pair<int, int>(11,19),
+        std::pair<int, int>(12,19),
+        std::pair<int, int>(13,19),
+        std::pair<int, int>(13,18),
+        std::pair<int, int>(14,18),
+        std::pair<int, int>(15,18),
+        std::pair<int, int>(16,18),
+    });
+    EXPECT_FALSE(success);
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, false, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(2,21),
+        std::pair<int, int>(3,21),
+        std::pair<int, int>(4,21),
+        std::pair<int, int>(5,21),
+        std::pair<int, int>(5,20),
+        std::pair<int, int>(6,20),
+        std::pair<int, int>(7,20),
+        std::pair<int, int>(8,20),
+        std::pair<int, int>(9,20),
+        std::pair<int, int>(9,19),
+        std::pair<int, int>(10,19),
+        std::pair<int, int>(11,19),
+        std::pair<int, int>(12,19),
+        std::pair<int, int>(13,19),
+        std::pair<int, int>(13,18),
+        std::pair<int, int>(14,18),
+        std::pair<int, int>(15,18),
+        std::pair<int, int>(16,18),
+        std::pair<int, int>(17,18),
+    });
+    EXPECT_FALSE(success);
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, false, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(2,21),
+        std::pair<int, int>(3,21),
+        std::pair<int, int>(4,21),
+        std::pair<int, int>(5,21),
+        std::pair<int, int>(5,20),
+        std::pair<int, int>(6,20),
+        std::pair<int, int>(7,20),
+        std::pair<int, int>(8,20),
+        std::pair<int, int>(9,20),
+        std::pair<int, int>(9,19),
+        std::pair<int, int>(10,19),
+        std::pair<int, int>(11,19),
+        std::pair<int, int>(12,19),
+        std::pair<int, int>(13,19),
+        std::pair<int, int>(13,18),
+        std::pair<int, int>(14,18),
+        std::pair<int, int>(15,18),
+        std::pair<int, int>(16,18)
+    });
+    EXPECT_TRUE(success);
+
+
+
+    x1 = 4;
+    y1 = 88;
+    x2 = 68;
+    y2 = 72;
+    pixel_width = 4;
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, true, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(1,21),
+        std::pair<int, int>(2,21),
+        std::pair<int, int>(3,21),
+        std::pair<int, int>(4,21),
+        std::pair<int, int>(5,20),
+        std::pair<int, int>(6,20),
+        std::pair<int, int>(7,20),
+        std::pair<int, int>(8,20),
+        std::pair<int, int>(9,19),
+        std::pair<int, int>(10,19),
+        std::pair<int, int>(11,19),
+        std::pair<int, int>(12,19),
+        std::pair<int, int>(13,18),
+        std::pair<int, int>(14,18),
+        std::pair<int, int>(15,18),
+        std::pair<int, int>(16,18),
+    });
+    EXPECT_TRUE(success);
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, true, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(1,21),
+        std::pair<int, int>(2,21),
+        std::pair<int, int>(3,21),
+        std::pair<int, int>(4,21),
+        std::pair<int, int>(5,20),
+        std::pair<int, int>(6,20),
+        std::pair<int, int>(7,20),
+        std::pair<int, int>(8,20),
+        std::pair<int, int>(9,19),
+        std::pair<int, int>(10,19),
+        std::pair<int, int>(11,19),
+        std::pair<int, int>(12,19),
+        std::pair<int, int>(13,18),
+        std::pair<int, int>(14,18),
+        std::pair<int, int>(15,18),
+    });
+    EXPECT_FALSE(success);
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, true, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(2,21),
+        std::pair<int, int>(3,21),
+        std::pair<int, int>(4,21),
+        std::pair<int, int>(5,20),
+        std::pair<int, int>(6,20),
+        std::pair<int, int>(7,20),
+        std::pair<int, int>(8,20),
+        std::pair<int, int>(9,19),
+        std::pair<int, int>(10,19),
+        std::pair<int, int>(11,19),
+        std::pair<int, int>(12,19),
+        std::pair<int, int>(13,18),
+        std::pair<int, int>(14,18),
+        std::pair<int, int>(15,18),
+        std::pair<int, int>(16,18),
+    });
+    EXPECT_FALSE(success);
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, false, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(1,21),
+        std::pair<int, int>(2,21),
+        std::pair<int, int>(3,21),
+        std::pair<int, int>(4,21),
+        std::pair<int, int>(5,20),
+        std::pair<int, int>(6,20),
+        std::pair<int, int>(7,20),
+        std::pair<int, int>(8,20),
+        std::pair<int, int>(9,19),
+        std::pair<int, int>(10,19),
+        std::pair<int, int>(11,19),
+        std::pair<int, int>(12,19),
+        std::pair<int, int>(13,18),
+        std::pair<int, int>(14,18),
+        std::pair<int, int>(15,18),
+        std::pair<int, int>(16,18),
+    });
+    EXPECT_FALSE(success);
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, false, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(1,21),
+        std::pair<int, int>(2,21),
+        std::pair<int, int>(3,21),
+        std::pair<int, int>(4,21),
+        std::pair<int, int>(5,20),
+        std::pair<int, int>(6,20),
+        std::pair<int, int>(7,20),
+        std::pair<int, int>(8,20),
+        std::pair<int, int>(9,19),
+        std::pair<int, int>(10,19),
+        std::pair<int, int>(11,19),
+        std::pair<int, int>(12,19),
+        std::pair<int, int>(13,18),
+        std::pair<int, int>(14,18),
+        std::pair<int, int>(15,18),
+    });
+    EXPECT_FALSE(success);
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, false, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(2,21),
+        std::pair<int, int>(3,21),
+        std::pair<int, int>(4,21),
+        std::pair<int, int>(5,20),
+        std::pair<int, int>(6,20),
+        std::pair<int, int>(7,20),
+        std::pair<int, int>(8,20),
+        std::pair<int, int>(9,19),
+        std::pair<int, int>(10,19),
+        std::pair<int, int>(11,19),
+        std::pair<int, int>(12,19),
+        std::pair<int, int>(13,18),
+        std::pair<int, int>(14,18),
+        std::pair<int, int>(15,18),
+        std::pair<int, int>(16,18),
+    });
+    EXPECT_FALSE(success);
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, false, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(2,21),
+        std::pair<int, int>(3,21),
+        std::pair<int, int>(4,21),
+        std::pair<int, int>(5,20),
+        std::pair<int, int>(6,20),
+        std::pair<int, int>(7,20),
+        std::pair<int, int>(8,20),
+        std::pair<int, int>(9,19),
+        std::pair<int, int>(10,19),
+        std::pair<int, int>(11,19),
+        std::pair<int, int>(12,19),
+        std::pair<int, int>(13,18),
+        std::pair<int, int>(14,18),
+        std::pair<int, int>(15,18),
+    });
+    EXPECT_TRUE(success);
+
+
+
+    x1 = 0;
+    y1 = 64;
+    x2 = 0;
+    y2 = 16;
+    pixel_width = 4;
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, true, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(0,15),
+        std::pair<int, int>(0,14),
+        std::pair<int, int>(0,13),
+        std::pair<int, int>(0,12),
+        std::pair<int, int>(0,11),
+        std::pair<int, int>(0,10),
+        std::pair<int, int>(0,9),
+        std::pair<int, int>(0,8),
+        std::pair<int, int>(0,7),
+        std::pair<int, int>(0,6),
+        std::pair<int, int>(0,5),
+        std::pair<int, int>(0,4),
+    });
+    EXPECT_TRUE(success);
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, false, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(0,14),
+        std::pair<int, int>(0,13),
+        std::pair<int, int>(0,12),
+        std::pair<int, int>(0,11),
+        std::pair<int, int>(0,10),
+        std::pair<int, int>(0,9),
+        std::pair<int, int>(0,8),
+        std::pair<int, int>(0,7),
+        std::pair<int, int>(0,6),
+        std::pair<int, int>(0,5),
+    });
+    EXPECT_TRUE(success);
+
+
+    x1 = 0;
+    y1 = 63;
+    x2 = 0;
+    y2 = 16;
+    pixel_width = 4;
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, true, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(0,15),
+        std::pair<int, int>(0,14),
+        std::pair<int, int>(0,13),
+        std::pair<int, int>(0,12),
+        std::pair<int, int>(0,11),
+        std::pair<int, int>(0,10),
+        std::pair<int, int>(0,9),
+        std::pair<int, int>(0,8),
+        std::pair<int, int>(0,7),
+        std::pair<int, int>(0,6),
+        std::pair<int, int>(0,5),
+        std::pair<int, int>(0,4),
+    });
+    EXPECT_TRUE(success);
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, false, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(0,14),
+        std::pair<int, int>(0,13),
+        std::pair<int, int>(0,12),
+        std::pair<int, int>(0,11),
+        std::pair<int, int>(0,10),
+        std::pair<int, int>(0,9),
+        std::pair<int, int>(0,8),
+        std::pair<int, int>(0,7),
+        std::pair<int, int>(0,6),
+        std::pair<int, int>(0,5),
+    });
+    EXPECT_TRUE(success);
+
+
+    x1 = 0;
+    y1 = 63;
+    x2 = 0;
+    y2 = 17;
+    pixel_width = 4;
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, true, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(0,15),
+        std::pair<int, int>(0,14),
+        std::pair<int, int>(0,13),
+        std::pair<int, int>(0,12),
+        std::pair<int, int>(0,11),
+        std::pair<int, int>(0,10),
+        std::pair<int, int>(0,9),
+        std::pair<int, int>(0,8),
+        std::pair<int, int>(0,7),
+        std::pair<int, int>(0,6),
+        std::pair<int, int>(0,5),
+        std::pair<int, int>(0,4),
+    });
+    EXPECT_TRUE(success);
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, false, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(0,14),
+        std::pair<int, int>(0,13),
+        std::pair<int, int>(0,12),
+        std::pair<int, int>(0,11),
+        std::pair<int, int>(0,10),
+        std::pair<int, int>(0,9),
+        std::pair<int, int>(0,8),
+        std::pair<int, int>(0,7),
+        std::pair<int, int>(0,6),
+        std::pair<int, int>(0,5),
+    });
+    EXPECT_TRUE(success);
 }
 
 
