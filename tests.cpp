@@ -93,10 +93,6 @@ hit_type square_is_on_endpoint(int x1, int y1, int x2, int y2, int square_x, int
     int y1_scaled = y1 / square_width;
     int x2_scaled = x2 / square_width;
     int y2_scaled = y2 / square_width;
-    if (x1 == 0 && y1 == 0 && x2 == 0 && y2 == 2 && square_width == 2)
-    {
-        int g = 0;
-    }
     if (dy < 0 && (y1 % square_width) == 0)
         y1_scaled--;
     if (dx < 0 && (x1 % square_width) == 0)
