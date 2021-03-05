@@ -12,179 +12,107 @@
 #define max(a, b) (((a) > (b)) ? (a) : (b))
 #endif
 
-bool line_intersects_pixel(int x1, int y1, int x2, int y2, int pixel_x, int pixel_y, int pixel_width)
+enum hit_type
 {
-    int dx = x2 - x1;
-    int dy = y2 - y1;
+    hit, unsure, miss
+};
 
-    if (pixel_x == x1 / pixel_width && pixel_y == y1 / pixel_width)
-        return true;
-
-    if (pixel_x == x2 / pixel_width && pixel_y == y2 / pixel_width)
-        return true;
-
-    if (dx == 0)
-    {
-        if (pixel_x * pixel_width <= min(x1, x2) / pixel_width && pixel_x * pixel_width + pixel_width >= max(x1, x2) / pixel_width)
-            return true;
-        else
-            return false;
-    }
-    if (dy == 0)
-    {
-        if (pixel_y * pixel_width <= min(y1, y2) / pixel_width && pixel_y * pixel_width + pixel_width >= max(y1, y2) / pixel_width)
-            return true;
-        else
-            return false;
-    }
-
-    int t1x_numerator = ((dx >= 0) ? (pixel_x * pixel_width) : (pixel_x * pixel_width + pixel_width - 0)) - x1;
-    int t1x_denominator = dx;
-    double dbg_t1x = (double)t1x_numerator / (double)t1x_denominator;
-    int t1y_numerator = ((dy >= 0) ? (pixel_y * pixel_width) : (pixel_y * pixel_width + pixel_width - 0)) - y1;
-    int t1y_denominator = dy;
-    double dbg_t1y = (double)t1y_numerator / (double)t1y_denominator;
-
-    int t2x_numerator = ((dx >= 0) ? (pixel_x * pixel_width + pixel_width - 0) : (pixel_x * pixel_width)) - x1;
-    int t2x_denominator = dx;
-    double dbg_t2x = (double)t2x_numerator / (double)t2x_denominator;
-    int t2y_numerator = ((dy >= 0) ? (pixel_y * pixel_width + pixel_width - 0) : (pixel_y * pixel_width)) - y1;
-    int t2y_denominator = dy;
-    double dbg_t2y = (double)t2y_numerator / (double)t2y_denominator;
-
-    int near_numerator = t1x_numerator;
-    int near_denominator = t1x_denominator;
-    double near_t = (double)near_numerator / (double)near_denominator;
-    if (t1y_numerator * near_denominator > near_numerator * t1y_denominator)
-    {
-        near_numerator = t1y_numerator;
-        near_denominator = t1y_denominator;
-        near_t = (double)near_numerator / (double)near_denominator;
-    }
-
-    int far_numerator = t2x_numerator;
-    int far_denominator = t2x_denominator;
-    double far_t = (double)far_numerator / (double)far_denominator;
-    if (t2y_numerator * far_denominator < far_numerator * t2y_denominator)
-    {
-        far_numerator = t2y_numerator;
-        far_denominator = t2y_denominator;
-        far_t = (double)far_numerator / (double)far_denominator;
-    }
-
-    bool dbg_cmp = near_t < far_t;
-    double dbg_near_x = (double)x1 + (double)dx * near_t;
-    double dbg_near_y = (double)y1 + (double)dy * near_t;
-    double dbg_far_x = (double)x1 + (double)dx * far_t;
-    double dbg_far_y = (double)y1 + (double)dy * far_t;
-
-    if (near_numerator * far_denominator > far_numerator * near_denominator)
-        return false;
-    else if (near_numerator * far_denominator == far_numerator * near_denominator)
-        return false;
-    else
-        return true;
-}
-
-void get_starting_pixel(int x1, int y1, int x2, int y2, int pixel_width,
-    int *out_x, int *out_y)
+hit_type line_square_intersection(int x1, int y1, int x2, int y2, int square_x, int square_y, int square_width)
 {
-    int dx = x2 - x1;
-    int dy = y2 - y1;
-    if (dx >= 0 && dy >= 0)
+    square_x *= square_width;
+    square_y *= square_width;
+    if (x1 == x2)
     {
-        *out_x = x1 / pixel_width;
-        *out_y = y1 / pixel_width;
-    }
-    else if (dx >= 0 && dy < 0)
-    {
-        if (y1 % pixel_width)
+        if (x1 > square_x && x1 < square_x + square_width)
         {
-            *out_x = x1 / pixel_width;
-            *out_y = y1 / pixel_width;
+            if (min(y1, y2) < square_y + square_width && max(y1, y2) > square_y)
+                return hit;
+            else
+                return unsure;
+        }
+        else if (x1 < square_x || x1 > square_x + square_width)
+        {
+            return miss;
         }
         else
         {
-            *out_x = x1 / pixel_width;
-            *out_y = (y1 / pixel_width) - 1;
+            return unsure;
         }
     }
-    else if (dx < 0 && dy >= 0)
+    if (y1 == y2)
     {
-        if (x1 % pixel_width)
+        if (y1 > square_y && y1 < square_y + square_width)
         {
-            *out_x = x1 / pixel_width;
-            *out_y = y1 / pixel_width;
+            if (min(x1, x2) < square_x + square_width && max(x1, x2) > square_x)
+                return hit;
+            else
+                return unsure;
+        }
+        else if (y1 < square_y || y1 > square_y + square_width)
+        {
+            return miss;
         }
         else
         {
-            *out_x = (x1 / pixel_width) - 1;
-            *out_y = y1 / pixel_width;
+            return unsure;
         }
     }
+
+    double dx = (double)(x2 - x1);
+    double dy = (double)(y2 - y1);
+    double rcp_dx = 1.0 / dx;
+    double rcp_dy = 1.0 / dy;
+    double t1x = ((double)((dx >= 0.0) ? (square_x) : (square_x + square_width)) - (double)x1) * rcp_dx;
+    double t1y = ((double)((dy >= 0.0) ? (square_y) : (square_y + square_width)) - (double)y1) * rcp_dy;
+    double t2x = ((double)((dx >= 0.0) ? (square_x + square_width) : (square_x)) - (double)x1) * rcp_dx;
+    double t2y = ((double)((dy >= 0.0) ? (square_y + square_width) : (square_y)) - (double)y1) * rcp_dy;
+
+    double t_min = max(t1x, t1y);
+    double t_max = min(t2x, t2y);
+    if (t_min < t_max - 0.00001)
+    {
+        if (t_max < 0.0001 || t_min > 0.999)
+            return miss;
+        return hit;
+    }
+    else if (t_min > t_max + 0.00001)
+        return miss;
     else
     {
-        if (x1 % pixel_width)
-            *out_x = x1 / pixel_width;
-        else
-            *out_x = (x1 / pixel_width) - 1;
-
-        if (y1 % pixel_width)
-            *out_y = y1 / pixel_width;
-        else
-            *out_y = (y1 / pixel_width) - 1;
+        if (t_max < 0.0001 || t_min > 0.999)
+            return miss;
+        return unsure;
     }
 }
 
-
-void get_ending_pixel(int x1, int y1, int x2, int y2, int pixel_width,
-    int *out_x, int *out_y)
+hit_type square_is_on_endpoint(int x1, int y1, int x2, int y2, int square_x, int square_y, int square_width)
 {
     int dx = x2 - x1;
     int dy = y2 - y1;
-    if (dx >= 0 && dy >= 0)
+    int x1_scaled = x1 / square_width;
+    int y1_scaled = y1 / square_width;
+    int x2_scaled = x2 / square_width;
+    int y2_scaled = y2 / square_width;
+    if (x1 == 0 && y1 == 0 && x2 == 0 && y2 == 2 && square_width == 2)
     {
-        if (x2 % pixel_width)
-            *out_x = x2 / pixel_width;
-        else
-            *out_x = (x2 / pixel_width) - 1;
+        int g = 0;
+    }
+    if (dy < 0 && (y1 % square_width) == 0)
+        y1_scaled--;
+    if (dx < 0 && (x1 % square_width) == 0)
+        x1_scaled--;
 
-        if (y2 % pixel_width)
-            *out_y = y2 / pixel_width;
-        else
-            *out_y = (y2 / pixel_width) - 1;
-    }
-    else if (dx >= 0 && dy < 0)
-    {
-        if (x2 % pixel_width)
-        {
-            *out_x = x2 / pixel_width;
-            *out_y = y2 / pixel_width;
-        }
-        else
-        {
-            *out_x = (x2 / pixel_width) - 1;
-            *out_y = y2 / pixel_width;
-        }
-    }
-    else if (dx < 0 && dy >= 0)
-    {
-        if (y2 % pixel_width)
-        {
-            *out_x = x2 / pixel_width;
-            *out_y = y2 / pixel_width;
-        }
-        else
-        {
-            *out_x = x2 / pixel_width;
-            *out_y = (y2 / pixel_width) - 1;
-        }
-    }
-    else
-    {
-        *out_x = x2 / pixel_width;
-        *out_y = y2 / pixel_width;
-    }
+    if (dy > 0 && (y2 % square_width) == 0)
+        y2_scaled--;
+    if (dx > 0 && (x2 % square_width) == 0)
+        x2_scaled--;
+    
+    if (square_x == x1_scaled && square_y == y1_scaled)
+            return hit;
+
+    if (square_x == x2_scaled && square_y == y2_scaled)
+            return hit;
+    return miss;
 }
 
 bool verify_line_correct(int x1, int y1, int x2, int y2, int pixel_width, uint32_t color, bool include_endpoints,
@@ -194,28 +122,16 @@ bool verify_line_correct(int x1, int y1, int x2, int y2, int pixel_width, uint32
     {
         for (int x = 0; x < image_width; x++)
         {
-            bool this_pixel_hit = line_intersects_pixel(x1, y1, x2, y2, x, y, pixel_width);
-            // line_intersects_pixel only testes the infinite line, now perform bounds checking.
-            int bounds_min_y = min(y1, y2) / pixel_width;
-            int bounds_max_y = max(y1, y2) / pixel_width;
-            int bounds_min_x = min(x1, x2) / pixel_width;
-            int bounds_max_x = max(x1, x2) / pixel_width;
-            bool in_bounds = x >= bounds_min_x && x <= bounds_max_x;
-            in_bounds &= y >= bounds_min_y && y <= bounds_max_y;
-            // Won't check anything that lies on the border. Its too annoying to check.
-            // Probably can just let the manual tests check those cases.
-            bool on_border = x == bounds_min_x && y >= bounds_min_y && y <= bounds_max_y;
-            on_border |= x == bounds_max_x && y >= bounds_min_y && y <= bounds_max_y;
-            on_border |= y == bounds_min_y && x >= bounds_min_x && x <= bounds_max_x;
-            on_border |= y == bounds_max_y && x >= bounds_min_x && x <= bounds_max_x;
-            if (x1 == x2 && y1 == y2)
-                in_bounds = false;
-            if (this_pixel_hit && in_bounds)
+            hit_type pixel_hit = line_square_intersection(x1, y1, x2, y2, x, y, pixel_width);
+            hit_type is_endpoint = square_is_on_endpoint(x1, y1, x2, y2, x, y, pixel_width);
+            if (is_endpoint == hit && !include_endpoints)
+                pixel_hit = miss;
+            if (pixel_hit == hit)
             {
-                if (image_pixels[y * image_width + x] != color && !on_border)
+                if (image_pixels[y * image_width + x] != color)
                     return false; // There should be a pixel set here, but there isn't.
             }
-            else if ((!this_pixel_hit || !in_bounds) && !on_border)
+            else if (pixel_hit == miss)
             {
                 int32_t value = image_pixels[y * image_width + x];
                 if (value == color)
@@ -281,27 +197,9 @@ void test_line_recursion(int x1, int y1, int x2, int y2, int pixel_width)
     uint32_t *lower_pixels = (uint32_t*)calloc(lower_width * lower_height, sizeof(uint32_t));
     uint32_t *upper_pixels = (uint32_t*)calloc(upper_width * upper_height, sizeof(uint32_t));
     uint32_t color = 1;
-    drawline_exclude_endpoints(x1, y1, x2, y2, pixel_width, color, upper_pixels, upper_width, upper_height);
-    drawline_exclude_endpoints(x1, y1, x2, y2, pixel_width * 2, color, lower_pixels, lower_width, lower_height);
-    bool success = verify_line_recursion(x1, y1, x2, y2, pixel_width, color, false, false, lower_pixels, lower_width, lower_height, upper_pixels);
-    EXPECT_TRUE(success);
-    memset(lower_pixels, 0, lower_width * lower_height * sizeof(uint32_t));
-    memset(upper_pixels, 0, upper_width * upper_height * sizeof(uint32_t));
-    drawline_exclude_endpoints(x1, y1, x2, y2, pixel_width, color, upper_pixels, upper_width, upper_height);
-    drawline_include_endpoints(x1, y1, x2, y2, pixel_width * 2, color, lower_pixels, lower_width, lower_height);
-    success = verify_line_recursion(x1, y1, x2, y2, pixel_width, color, false, true, lower_pixels, lower_width, lower_height, upper_pixels);
-    EXPECT_TRUE(success);
-    memset(lower_pixels, 0, lower_width * lower_height * sizeof(uint32_t));
-    memset(upper_pixels, 0, upper_width * upper_height * sizeof(uint32_t));
-    drawline_include_endpoints(x1, y1, x2, y2, pixel_width, color, upper_pixels, upper_width, upper_height);
-    drawline_exclude_endpoints(x1, y1, x2, y2, pixel_width * 2, color, lower_pixels, lower_width, lower_height);
-    success = verify_line_recursion(x1, y1, x2, y2, pixel_width, color, true, false, lower_pixels, lower_width, lower_height, upper_pixels);
-    EXPECT_TRUE(success);
-    memset(lower_pixels, 0, lower_width * lower_height * sizeof(uint32_t));
-    memset(upper_pixels, 0, upper_width * upper_height * sizeof(uint32_t));
     drawline_include_endpoints(x1, y1, x2, y2, pixel_width, color, upper_pixels, upper_width, upper_height);
     drawline_include_endpoints(x1, y1, x2, y2, pixel_width * 2, color, lower_pixels, lower_width, lower_height);
-    success = verify_line_recursion(x1, y1, x2, y2, pixel_width, color, true, true, lower_pixels, lower_width, lower_height, upper_pixels);
+    bool success = verify_line_recursion(x1, y1, x2, y2, pixel_width, color, true, true, lower_pixels, lower_width, lower_height, upper_pixels);
     EXPECT_TRUE(success);
     free(lower_pixels);
     free(upper_pixels);
@@ -313,10 +211,6 @@ void test_draw_line_basic(int x1, int y1, int x2, int y2, int pixel_width)
     int image_height = 32;
     uint32_t *image_pixels = (uint32_t*)calloc(image_width * image_height, sizeof(uint32_t));
     uint32_t color = 1;
-            if (x1 == 0 && y1 == 0 && x2 == 0 && y2 == 1)
-            {
-                int g = 0;
-            }
     drawline_exclude_endpoints(x1, y1, x2, y2, pixel_width, color, image_pixels, image_width, image_height);
     bool success = verify_line_correct(x1, y1, x2, y2, pixel_width, color, false, image_pixels, image_width, image_height);
     EXPECT_TRUE(success);
@@ -383,46 +277,560 @@ bool verify_line_manual(int x1, int y1, int x2, int y2, int pixel_width, bool in
     return success;
 }
 
-// Only tests very simple 45 degree going (+,+)
-TEST(diagonal_top_right, DrawLine)
+TEST(auto_test, DrawLine)
 {
-    /*
-    test_line(0, 0, 16, 16, 1);
-    test_line(0, 0, 16, 16, 2);
-    test_line(0, 0, 16, 16, 4);
-    test_line(0, 0, 16, 16, 8);
-
-    test_line(0, 3, 16, 16, 1);
-    test_line(0, 3, 16, 16, 2);
-    test_line(0, 3, 16, 16, 4);
-    test_line(0, 3, 16, 16, 8);
-
-    test_line(3, 3, 16, 16, 1);
-    test_line(3, 3, 16, 16, 2);
-    test_line(3, 3, 16, 16, 4);
-    test_line(3, 3, 16, 16, 8);
-    */
-}
-
-TEST(auto_test_top_right, DrawLine)
-{
-    /*
     for (int width = 2; width < 16; width *= 2)
     {
-        for (int x2 = 0; x2 < 32; x2++)
+        for (int x2 = 0; x2 < 64; x2++)
         {
-            for (int y2 = 0; y2 < 32; y2++)
+            for (int y2 = 0; y2 < 64; y2++)
             {
-                int x1 = 0;
-                int y1 = 0;
+                int x1 = 32;
+                int y1 = 32;
                 test_line(x1, y1, x2, y2, width);
             }
         }
     }
-    */
 }
 
 
+// Several known correct points on the line.
+// These points are calculated manually, by looking at a graph to see exactly which squares intersect the line.
+// This is where the actual behaviour is proven to be what is needed.
+TEST(manual_test_bottom_left, DrawLine)
+{
+    int x1, y1, x2, y2;
+    int pixel_width;
+    bool success;
+    x1 = 7;
+    y1 = 7;
+    x2 = 0;
+    y2 = 0;
+    pixel_width = 1;
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, true, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(6, 6),
+        std::pair<int, int>(5, 5),
+        std::pair<int, int>(4, 4),
+        std::pair<int, int>(3, 3),
+        std::pair<int, int>(2, 2),
+        std::pair<int, int>(1, 1),
+        std::pair<int, int>(0, 0)
+    });
+    EXPECT_TRUE(success);
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, false, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(5, 5),
+        std::pair<int, int>(4, 4),
+        std::pair<int, int>(3, 3),
+        std::pair<int, int>(2, 2),
+        std::pair<int, int>(1, 1),
+    });
+    EXPECT_TRUE(success);
+
+    x1 = 25;
+    y1 = 18;
+    x2 = 1;
+    y2 = 9;
+    pixel_width = 4;
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, true, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(6, 4),
+        std::pair<int, int>(5, 4),
+        std::pair<int, int>(4, 4),
+        std::pair<int, int>(4, 3),
+        std::pair<int, int>(3, 3),
+        std::pair<int, int>(2, 3),
+        std::pair<int, int>(2, 2),
+        std::pair<int, int>(1, 2),
+        std::pair<int, int>(0, 2),
+    });
+    EXPECT_TRUE(success);
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, false, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(5, 4),
+        std::pair<int, int>(4, 4),
+        std::pair<int, int>(4, 3),
+        std::pair<int, int>(3, 3),
+        std::pair<int, int>(2, 3),
+        std::pair<int, int>(2, 2),
+        std::pair<int, int>(1, 2),
+    });
+    EXPECT_TRUE(success);
+
+
+    x1 = 25;
+    y1 = 18;
+    x2 = 1;
+    y2 = 9;
+    pixel_width = 4;
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, true, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(6, 4),
+        std::pair<int, int>(5, 4),
+        std::pair<int, int>(4, 4),
+        std::pair<int, int>(4, 3),
+        std::pair<int, int>(3, 3),
+        std::pair<int, int>(2, 3),
+        std::pair<int, int>(2, 2),
+        std::pair<int, int>(1, 2),
+        std::pair<int, int>(0, 2),
+    });
+    EXPECT_TRUE(success);
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, false, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(5, 4),
+        std::pair<int, int>(4, 4),
+        std::pair<int, int>(4, 3),
+        std::pair<int, int>(3, 3),
+        std::pair<int, int>(2, 3),
+        std::pair<int, int>(2, 2),
+        std::pair<int, int>(1, 2),
+    });
+    EXPECT_TRUE(success);
+
+
+    x1 = 24;
+    y1 = 18;
+    x2 = 9;
+    y2 = 9;
+    pixel_width = 4;
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, true, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(5, 4),
+        std::pair<int, int>(5, 3),
+        std::pair<int, int>(4, 3),
+        std::pair<int, int>(3, 3),
+        std::pair<int, int>(3, 2),
+        std::pair<int, int>(2, 2),
+    });
+    EXPECT_TRUE(success);
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, false, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(5, 3),
+        std::pair<int, int>(4, 3),
+        std::pair<int, int>(3, 3),
+        std::pair<int, int>(3, 2),
+    });
+    EXPECT_TRUE(success);
+}
+
+// Several known correct points on the line.
+// These points are calculated manually, by looking at a graph to see exactly which squares intersect the line.
+// This is where the actual behaviour is proven to be what is needed.
+TEST(manual_test_top_left, DrawLine)
+{
+    int x1, y1, x2, y2;
+    int pixel_width;
+    bool success;
+    x1 = 7;
+    y1 = 0;
+    x2 = 0;
+    y2 = 7;
+    pixel_width = 1;
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, true, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(6, 0),
+        std::pair<int, int>(5, 1),
+        std::pair<int, int>(4, 2),
+        std::pair<int, int>(3, 3),
+        std::pair<int, int>(2, 4),
+        std::pair<int, int>(1, 5),
+        std::pair<int, int>(0, 6)
+    });
+    EXPECT_TRUE(success);
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, false, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(5, 1),
+        std::pair<int, int>(4, 2),
+        std::pair<int, int>(3, 3),
+        std::pair<int, int>(2, 4),
+        std::pair<int, int>(1, 5)
+    });
+    EXPECT_TRUE(success);
+
+
+    x1 = 16;
+    y1 = 1;
+    x2 = 1;
+    y2 = 19;
+    pixel_width = 1;
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, true, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(15, 1),
+        std::pair<int, int>(15, 2),
+        std::pair<int, int>(14, 2),
+        std::pair<int, int>(14, 3),
+        std::pair<int, int>(13, 3),
+        std::pair<int, int>(13, 4),
+        std::pair<int, int>(12, 4),
+        std::pair<int, int>(12, 5),
+        std::pair<int, int>(11, 5),
+        std::pair<int, int>(11, 6),
+        std::pair<int, int>(10, 7),
+        std::pair<int, int>(10, 8),
+        std::pair<int, int>(9, 8),
+        std::pair<int, int>(9, 9),
+        std::pair<int, int>(8, 9),
+        std::pair<int, int>(8, 10),
+        std::pair<int, int>(7, 10),
+        std::pair<int, int>(7, 11),
+        std::pair<int, int>(6, 11),
+        std::pair<int, int>(6, 12),
+        std::pair<int, int>(5, 13),
+        std::pair<int, int>(5, 14),
+        std::pair<int, int>(4, 14),
+        std::pair<int, int>(4, 15),
+        std::pair<int, int>(3, 15),
+        std::pair<int, int>(3, 16),
+        std::pair<int, int>(2, 16),
+        std::pair<int, int>(2, 17),
+        std::pair<int, int>(1, 17),
+        std::pair<int, int>(1, 18),
+    });
+    EXPECT_TRUE(success);
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, false, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(15, 2),
+        std::pair<int, int>(14, 2),
+        std::pair<int, int>(14, 3),
+        std::pair<int, int>(13, 3),
+        std::pair<int, int>(13, 4),
+        std::pair<int, int>(12, 4),
+        std::pair<int, int>(12, 5),
+        std::pair<int, int>(11, 5),
+        std::pair<int, int>(11, 6),
+        std::pair<int, int>(10, 7),
+        std::pair<int, int>(10, 8),
+        std::pair<int, int>(9, 8),
+        std::pair<int, int>(9, 9),
+        std::pair<int, int>(8, 9),
+        std::pair<int, int>(8, 10),
+        std::pair<int, int>(7, 10),
+        std::pair<int, int>(7, 11),
+        std::pair<int, int>(6, 11),
+        std::pair<int, int>(6, 12),
+        std::pair<int, int>(5, 13),
+        std::pair<int, int>(5, 14),
+        std::pair<int, int>(4, 14),
+        std::pair<int, int>(4, 15),
+        std::pair<int, int>(3, 15),
+        std::pair<int, int>(3, 16),
+        std::pair<int, int>(2, 16),
+        std::pair<int, int>(2, 17),
+        std::pair<int, int>(1, 17),
+    });
+    EXPECT_TRUE(success);
+
+
+    x1 = 16;
+    y1 = 1;
+    x2 = 1;
+    y2 = 19;
+    pixel_width = 4;
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, true, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(3, 0),
+        std::pair<int, int>(3, 1),
+        std::pair<int, int>(2, 1),
+        std::pair<int, int>(2, 2),
+        std::pair<int, int>(1, 2),
+        std::pair<int, int>(1, 3),
+        std::pair<int, int>(0, 3),
+        std::pair<int, int>(0, 4),
+    });
+    EXPECT_TRUE(success);
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, false, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(3, 1),
+        std::pair<int, int>(2, 1),
+        std::pair<int, int>(2, 2),
+        std::pair<int, int>(1, 2),
+        std::pair<int, int>(1, 3),
+        std::pair<int, int>(0, 3),
+    });
+    EXPECT_TRUE(success);
+
+    x1 = 16;
+    y1 = 4;
+    x2 = 1;
+    y2 = 19;
+    pixel_width = 4;
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, true, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(3, 1),
+        std::pair<int, int>(2, 2),
+        std::pair<int, int>(1, 3),
+        std::pair<int, int>(0, 4),
+    });
+    EXPECT_TRUE(success);
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, false, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(2, 2),
+        std::pair<int, int>(1, 3),
+    });
+    EXPECT_TRUE(success);
+
+    x1 = 18;
+    y1 = 4;
+    x2 = 1;
+    y2 = 19;
+    pixel_width = 4;
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, true, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(4, 1),
+        std::pair<int, int>(3, 1),
+        std::pair<int, int>(3, 2),
+        std::pair<int, int>(2, 2),
+        std::pair<int, int>(2, 3),
+        std::pair<int, int>(1, 3),
+        std::pair<int, int>(1, 4),
+        std::pair<int, int>(0, 4),
+    });
+    EXPECT_TRUE(success);
+
+
+    x1 = 20;
+    y1 = 0;
+    x2 = 0;
+    y2 = 0;
+    pixel_width = 4;
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, true, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(4, 0),
+        std::pair<int, int>(3, 0),
+        std::pair<int, int>(2, 0),
+        std::pair<int, int>(1, 0),
+        std::pair<int, int>(0, 0),
+    });
+    EXPECT_TRUE(success);
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, false, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(3, 0),
+        std::pair<int, int>(2, 0),
+        std::pair<int, int>(1, 0),
+    });
+    EXPECT_TRUE(success);
+
+    x1 = 21;
+    y1 = 0;
+    x2 = 0;
+    y2 = 0;
+    pixel_width = 4;
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, true, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(5, 0),
+        std::pair<int, int>(4, 0),
+        std::pair<int, int>(3, 0),
+        std::pair<int, int>(2, 0),
+        std::pair<int, int>(1, 0),
+        std::pair<int, int>(0, 0),
+    });
+    EXPECT_TRUE(success);
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, false, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(4, 0),
+        std::pair<int, int>(3, 0),
+        std::pair<int, int>(2, 0),
+        std::pair<int, int>(1, 0),
+    });
+    EXPECT_TRUE(success);
+    
+    x1 = 22;
+    y1 = 0;
+    x2 = 0;
+    y2 = 0;
+    pixel_width = 4;
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, true, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(5, 0),
+        std::pair<int, int>(4, 0),
+        std::pair<int, int>(3, 0),
+        std::pair<int, int>(2, 0),
+        std::pair<int, int>(1, 0),
+        std::pair<int, int>(0, 0),
+    });
+    EXPECT_TRUE(success);
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, false, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(4, 0),
+        std::pair<int, int>(3, 0),
+        std::pair<int, int>(2, 0),
+        std::pair<int, int>(1, 0),
+    });
+    EXPECT_TRUE(success);
+
+    x1 = 23;
+    y1 = 0;
+    x2 = 0;
+    y2 = 0;
+    pixel_width = 4;
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, true, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(5, 0),
+        std::pair<int, int>(4, 0),
+        std::pair<int, int>(3, 0),
+        std::pair<int, int>(2, 0),
+        std::pair<int, int>(1, 0),
+        std::pair<int, int>(0, 0),
+    });
+    EXPECT_TRUE(success);
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, false, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(4, 0),
+        std::pair<int, int>(3, 0),
+        std::pair<int, int>(2, 0),
+        std::pair<int, int>(1, 0),
+    });
+    EXPECT_TRUE(success);
+
+    x1 = 20;
+    y1 = 4;
+    x2 = 0;
+    y2 = 0;
+    pixel_width = 4;
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, true, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(4, 0),
+        std::pair<int, int>(3, 0),
+        std::pair<int, int>(2, 0),
+        std::pair<int, int>(1, 0),
+        std::pair<int, int>(0, 0),
+    });
+    EXPECT_TRUE(success);
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, false, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(3, 0),
+        std::pair<int, int>(2, 0),
+        std::pair<int, int>(1, 0),
+    });
+    EXPECT_TRUE(success);
+
+    x1 = 21;
+    y1 = 4;
+    x2 = 0;
+    y2 = 0;
+    pixel_width = 4;
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, true, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(5, 0),
+        std::pair<int, int>(4, 0),
+        std::pair<int, int>(3, 0),
+        std::pair<int, int>(2, 0),
+        std::pair<int, int>(1, 0),
+        std::pair<int, int>(0, 0),
+    });
+    EXPECT_TRUE(success);
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, false, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(4, 0),
+        std::pair<int, int>(3, 0),
+        std::pair<int, int>(2, 0),
+        std::pair<int, int>(1, 0),
+    });
+    EXPECT_TRUE(success);
+    
+    x1 = 22;
+    y1 = 4;
+    x2 = 0;
+    y2 = 0;
+    pixel_width = 4;
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, true, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(5, 0),
+        std::pair<int, int>(4, 0),
+        std::pair<int, int>(3, 0),
+        std::pair<int, int>(2, 0),
+        std::pair<int, int>(1, 0),
+        std::pair<int, int>(0, 0),
+    });
+    EXPECT_TRUE(success);
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, false, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(4, 0),
+        std::pair<int, int>(3, 0),
+        std::pair<int, int>(2, 0),
+        std::pair<int, int>(1, 0),
+    });
+    EXPECT_TRUE(success);
+
+    x1 = 23;
+    y1 = 4;
+    x2 = 0;
+    y2 = 0;
+    pixel_width = 4;
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, true, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(5, 0),
+        std::pair<int, int>(4, 0),
+        std::pair<int, int>(3, 0),
+        std::pair<int, int>(2, 0),
+        std::pair<int, int>(1, 0),
+        std::pair<int, int>(0, 0),
+    });
+    EXPECT_TRUE(success);
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, false, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(4, 0),
+        std::pair<int, int>(3, 0),
+        std::pair<int, int>(2, 0),
+        std::pair<int, int>(1, 0),
+    });
+    EXPECT_TRUE(success);
+
+    x1 = 20;
+    y1 = 3;
+    x2 = 0;
+    y2 = 3;
+    pixel_width = 4;
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, true, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(4, 0),
+        std::pair<int, int>(3, 0),
+        std::pair<int, int>(2, 0),
+        std::pair<int, int>(1, 0),
+        std::pair<int, int>(0, 0),
+    });
+    EXPECT_TRUE(success);
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, false, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(3, 0),
+        std::pair<int, int>(2, 0),
+        std::pair<int, int>(1, 0),
+    });
+    EXPECT_TRUE(success);
+
+    x1 = 21;
+    y1 = 3;
+    x2 = 0;
+    y2 = 3;
+    pixel_width = 4;
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, true, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(5, 0),
+        std::pair<int, int>(4, 0),
+        std::pair<int, int>(3, 0),
+        std::pair<int, int>(2, 0),
+        std::pair<int, int>(1, 0),
+        std::pair<int, int>(0, 0),
+    });
+    EXPECT_TRUE(success);
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, false, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(4, 0),
+        std::pair<int, int>(3, 0),
+        std::pair<int, int>(2, 0),
+        std::pair<int, int>(1, 0),
+    });
+    EXPECT_TRUE(success);
+    
+    x1 = 22;
+    y1 = 3;
+    x2 = 0;
+    y2 = 3;
+    pixel_width = 4;
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, true, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(5, 0),
+        std::pair<int, int>(4, 0),
+        std::pair<int, int>(3, 0),
+        std::pair<int, int>(2, 0),
+        std::pair<int, int>(1, 0),
+        std::pair<int, int>(0, 0),
+    });
+    EXPECT_TRUE(success);
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, false, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(4, 0),
+        std::pair<int, int>(3, 0),
+        std::pair<int, int>(2, 0),
+        std::pair<int, int>(1, 0),
+    });
+    EXPECT_TRUE(success);
+
+    x1 = 23;
+    y1 = 3;
+    x2 = 0;
+    y2 = 3;
+    pixel_width = 4;
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, true, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(5, 0),
+        std::pair<int, int>(4, 0),
+        std::pair<int, int>(3, 0),
+        std::pair<int, int>(2, 0),
+        std::pair<int, int>(1, 0),
+        std::pair<int, int>(0, 0),
+    });
+    EXPECT_TRUE(success);
+    success = verify_line_manual(x1, y1, x2, y2, pixel_width, false, std::vector<std::pair<int, int>>{
+        std::pair<int, int>(4, 0),
+        std::pair<int, int>(3, 0),
+        std::pair<int, int>(2, 0),
+        std::pair<int, int>(1, 0),
+    });
+    EXPECT_TRUE(success);
+}
 
 // Several known correct points on the line.
 // These points are calculated manually, by looking at a graph to see exactly which squares intersect the line.

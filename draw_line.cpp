@@ -15,9 +15,9 @@ uint32_t *image_pixels, int image_width, int image_height)
     int local_y = y1 % pixel_width;
     int x_dist = (dx >= 0) ? (pixel_width - local_x) : (local_x);
     int y_dist = (dy >= 0) ? (pixel_width - local_y) : (local_y);
-    int clockwiseness = dx * abs(y_dist) - abs(dy) * (x_dist);
+    int clockwiseness = abs(dx) * abs(y_dist) - abs(dy) * abs(x_dist);
     int dx_clockwiseness = -abs(dy) * pixel_width;
-    int dy_clockwiseness = dx * pixel_width;
+    int dy_clockwiseness = abs(dx) * pixel_width;
 
     int x = x1 / pixel_width;
     int y = y1 / pixel_width;
@@ -50,6 +50,8 @@ uint32_t *image_pixels, int image_width, int image_height)
         if ((x2 % pixel_width) == 0)
             end_x--;
     }
+    if (x == end_x && y == end_y)
+        return;
     while (true)
     {
         int old_clockwiseness = clockwiseness;
@@ -89,9 +91,9 @@ uint32_t *image_pixels, int image_width, int image_height)
     int local_y = y1 % pixel_width;
     int x_dist = (dx >= 0) ? (pixel_width - local_x) : (local_x);
     int y_dist = (dy >= 0) ? (pixel_width - local_y) : (local_y);
-    int clockwiseness = dx * abs(y_dist) - abs(dy) * (x_dist);
+    int clockwiseness = abs(dx) * abs(y_dist) - abs(dy) * abs(x_dist);
     int dx_clockwiseness = -abs(dy) * pixel_width;
-    int dy_clockwiseness = dx * pixel_width;
+    int dy_clockwiseness = abs(dx) * pixel_width;
 
     int x = x1 / pixel_width;
     int y = y1 / pixel_width;
