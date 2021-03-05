@@ -9,18 +9,47 @@ uint32_t *image_pixels, int image_width, int image_height)
     int dy = y2 - y1;
     int x_step = (dx >= 0) ? 1 : -1;
     int y_step = (dy >= 0) ? 1 : -1;
-    int next_pixel_x = (dx >= 0) ? pixel_width : -1;
-    int next_pixel_y = (dy >= 0) ? pixel_width : -1;
+    int next_pixel_x = (dx >= 0) ? pixel_width : 0;
+    int next_pixel_y = (dy >= 0) ? pixel_width : 0;
     int local_x = x1 % pixel_width;
     int local_y = y1 % pixel_width;
-    int clockwiseness = dx * (next_pixel_y - local_y) - dy * (next_pixel_x - local_x);
-    int dx_clockwiseness = -dy * pixel_width;
+    int x_dist = (dx >= 0) ? (pixel_width - local_x) : (local_x);
+    int y_dist = (dy >= 0) ? (pixel_width - local_y) : (local_y);
+    int clockwiseness = dx * abs(y_dist) - abs(dy) * (x_dist);
+    int dx_clockwiseness = -abs(dy) * pixel_width;
     int dy_clockwiseness = dx * pixel_width;
 
     int x = x1 / pixel_width;
     int y = y1 / pixel_width;
     int end_x = x2 / pixel_width;
     int end_y = y2 / pixel_width;
+    if (dy < 0)
+    {
+        if ((y1 % pixel_width) == 0)
+        {
+            y--;
+            clockwiseness += dy_clockwiseness;
+        }
+    }
+    else if (dy > 0)
+    {
+        if ((y2 % pixel_width) == 0)
+            end_y--;
+    }
+
+    if (dx < 0)
+    {
+        if ((x1 % pixel_width) == 0)
+        {
+            x--;
+            clockwiseness += dx_clockwiseness;
+        }
+    }
+    else if (dx > 0)
+    {
+        if ((x2 % pixel_width) == 0)
+            end_x--;
+    }
     while (true)
     {
         int old_clockwiseness = clockwiseness;
@@ -54,37 +83,54 @@ uint32_t *image_pixels, int image_width, int image_height)
     int dy = y2 - y1;
     int x_step = (dx >= 0) ? 1 : -1;
     int y_step = (dy >= 0) ? 1 : -1;
-    int next_pixel_x = (dx >= 0) ? pixel_width : -1;
-    int next_pixel_y = (dy >= 0) ? pixel_width : -1;
+    int next_pixel_x = (dx >= 0) ? pixel_width : 0;
+    int next_pixel_y = (dy >= 0) ? pixel_width : 0;
     int local_x = x1 % pixel_width;
     int local_y = y1 % pixel_width;
-    int clockwiseness = dx * (next_pixel_y - local_y) - dy * (next_pixel_x - local_x);
-    int dx_clockwiseness = -dy * pixel_width;
+    int x_dist = (dx >= 0) ? (pixel_width - local_x) : (local_x);
+    int y_dist = (dy >= 0) ? (pixel_width - local_y) : (local_y);
+    int clockwiseness = dx * abs(y_dist) - abs(dy) * (x_dist);
+    int dx_clockwiseness = -abs(dy) * pixel_width;
     int dy_clockwiseness = dx * pixel_width;
 
     int x = x1 / pixel_width;
     int y = y1 / pixel_width;
     int end_x = x2 / pixel_width;
     int end_y = y2 / pixel_width;
-    if (x2 % pixel_width && y2 % pixel_width)
+    if (dy < 0)
     {
-        // The endpoint closest to (+INF, +INF) must be rounded up 1 if the endpoint lies
-        // inside a pixel, effectively ceiling it.
-        local_x = x2 % pixel_width;
-        local_y = y2 % pixel_width;
-        int end_clockwiseness = dx * (next_pixel_y - local_y) - dy * (next_pixel_x - local_x);
-        if (end_clockwiseness >= 0)
-            end_x++;
-        if (end_clockwiseness <= 0)
-            end_y++;
+        if ((y1 % pixel_width) == 0)
+        {
+            y--;
+            clockwiseness += dy_clockwiseness;
+        }
+    }
+    else if (dy > 0)
+    {
+        if ((y2 % pixel_width) == 0)
+            end_y--;
+    }
+
+    if (dx < 0)
+    {
+        if ((x1 % pixel_width) == 0)
+        {
+            x--;
+            clockwiseness += dx_clockwiseness;
+        }
+    }
+    else if (dx > 0)
+    {
+        if ((x2 % pixel_width) == 0)
+            end_x--;
     }
     while (true)
     {
-        if (x == end_x && y == end_y)
-            break;
-
         if (y >= 0 && y < image_height && x >= 0 && x < image_width)
             image_pixels[y * image_width + x] = color;
+
+        if (x == end_x && y == end_y)
+            break;
 
         int old_clockwiseness = clockwiseness;
         if (old_clockwiseness >= 0)
