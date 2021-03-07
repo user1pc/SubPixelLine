@@ -129,7 +129,7 @@ bool verify_line_correct(int x1, int y1, int x2, int y2, int pixel_width, uint32
             }
             else if (pixel_hit == miss)
             {
-                int32_t value = image_pixels[y * image_width + x];
+                uint32_t value = image_pixels[y * image_width + x];
                 if (value == color)
                     return false; // There shouldn't be a pixel set here, but there is.
             }
@@ -174,7 +174,7 @@ bool verify_line_recursion(int x1, int y1, int x2, int y2, int pixel_width, uint
                 }
                 else
                 {
-                    int32_t value = lower_pixels[y * lower_width + x];
+                    uint32_t value = lower_pixels[y * lower_width + x];
                     if (value == color)
                         return false; // There shouldn't be a pixel set here, but there is.
                 }
@@ -226,8 +226,6 @@ void test_line(int x1, int y1, int x2, int y2, int pixel_width)
 bool verify_line_manual(int x1, int y1, int x2, int y2, int pixel_width, bool include_endpoints,
     std::vector<std::pair<int, int>> known_correct_points)
 {
-    int dx = x2 - x1;
-    int dy = y2 - y1;
     int min_x = INT32_MAX;
     int max_x = 0;
     int min_y = INT32_MAX;

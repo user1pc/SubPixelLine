@@ -1,13 +1,13 @@
 
-#ifndef _DRAW_LINE_H
-#define _DRAW_LINE_H
+#ifndef DRAW_LINE_H
+#define DRAW_LINE_H
 
 #include <stdint.h>
 
-void drawline_exclude_endpoints(int x1, int y1, int x2, int y2, int pixel_width, uint32_t color,
-uint32_t *image_pixels, int image_width, int image_height);
+void drawline_include_endpoints(int32_t x1, int32_t y1, int32_t x2, int32_t y2, int32_t pixel_width, uint32_t color,
+    uint32_t *pixels, int width, int height);
 
-void drawline_include_endpoints(int x1, int y1, int x2, int y2, int pixel_width, uint32_t color,
-uint32_t *image_pixels, int image_width, int image_height);
+void drawline_exclude_endpoints(int32_t x1, int32_t y1, int32_t x2, int32_t y2, int32_t pixel_width, uint32_t color,
+    uint32_t *pixels, int width, int height);
 
-#endif // _DRAW_LINE_H
+#endif // DRAW_LINE_H
