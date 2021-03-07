@@ -2,8 +2,10 @@
 #include <stdlib.h>
 #include <utility>
 #include <vector>
+#include <functional>
 #include "gtest/gtest.h"
 #include "draw_line.h"
+#include "line_traverser.h"
 
 #ifndef min
 #define min(a, b) (((a) < (b)) ? (a) : (b))
@@ -3216,6 +3218,157 @@ TEST(manual_test_top_right, DrawLine)
         
     });
     EXPECT_FALSE(success);
+}
+
+typedef struct
+{
+    int i;
+    int32_t ep1x, ep1y, ep2x, ep2y;
+} VerifyEndpointsInfo;
+
+
+void verify_endpoints_callback(int32_t x, int32_t y, void *user_data)
+{
+    VerifyEndpointsInfo *p_info = (VerifyEndpointsInfo*)user_data;
+    if (p_info->i == 0)
+    {
+        p_info->ep1x = x;
+        p_info->ep1y = y;
+    }
+    p_info->i++;
+    p_info->ep2x = x;
+    p_info->ep2y = y;
+}
+
+bool verify_endpoints(int x1, int y1, int x2, int y2, int square_width)
+{
+    int32_t test_ep1x, test_ep1y, test_ep2x, test_ep2y;
+    VerifyEndpointsInfo info;
+    info.i = 0;
+    LineTraverser_get_endpoints(x1, y1, x2, y2, square_width, &test_ep1x, &test_ep1y,
+    &test_ep2x, &test_ep2y);
+    LineTraverser_traverse_include_endpoints(x1,y1,x2,y2,square_width, verify_endpoints_callback, &info);
+    if (info.ep1x != test_ep1x)
+        return false;
+    if (info.ep1y != test_ep1y)
+        return false;
+    if (info.ep2x != test_ep2x)
+        return false;
+    if (info.ep2y != test_ep2y)
+        return false;
+    return true;
+}
+
+TEST(endpoint_test, DrawLine)
+{
+    int32_t x1, y1, x2, y2, square_width;
+    bool include_endpoints;
+    bool success;
+
+    x1 = 0;
+    y1 = 0;
+    x2 = 0;
+    y2 = 100;
+    verify_endpoints(x1, y1, x2, y2, 1);
+    verify_endpoints(x1, y1, x2, y2, 2);
+    verify_endpoints(x1, y1, x2, y2, 4);
+    verify_endpoints(x1, y1, x2, y2, 8);
+
+    x1 = 0;
+    y1 = 100;
+    x2 = 0;
+    y2 = 0;
+    verify_endpoints(x1, y1, x2, y2, 1);
+    verify_endpoints(x1, y1, x2, y2, 2);
+    verify_endpoints(x1, y1, x2, y2, 4);
+    verify_endpoints(x1, y1, x2, y2, 8);
+
+    x1 = 0;
+    y1 = 0;
+    x2 = 100;
+    y2 = 0;
+    verify_endpoints(x1, y1, x2, y2, 1);
+    verify_endpoints(x1, y1, x2, y2, 2);
+    verify_endpoints(x1, y1, x2, y2, 4);
+    verify_endpoints(x1, y1, x2, y2, 8);
+
+    x1 = 1000;
+    y1 = 0;
+    x2 = 0;
+    y2 = 0;
+    verify_endpoints(x1, y1, x2, y2, 1);
+    verify_endpoints(x1, y1, x2, y2, 2);
+    verify_endpoints(x1, y1, x2, y2, 4);
+    verify_endpoints(x1, y1, x2, y2, 8);
+
+
+    x1 = 1;
+    y1 = 0;
+    x2 = 1;
+    y2 = 100;
+    verify_endpoints(x1, y1, x2, y2, 1);
+    verify_endpoints(x1, y1, x2, y2, 2);
+    verify_endpoints(x1, y1, x2, y2, 4);
+    verify_endpoints(x1, y1, x2, y2, 8);
+
+    x1 = 1;
+    y1 = 100;
+    x2 = 1;
+    y2 = 0;
+    verify_endpoints(x1, y1, x2, y2, 1);
+    verify_endpoints(x1, y1, x2, y2, 2);
+    verify_endpoints(x1, y1, x2, y2, 4);
+    verify_endpoints(x1, y1, x2, y2, 8);
+
+
+    x1 = 0;
+    y1 = 1;
+    x2 = 100;
+    y2 = 1;
+    verify_endpoints(x1, y1, x2, y2, 1);
+    verify_endpoints(x1, y1, x2, y2, 2);
+    verify_endpoints(x1, y1, x2, y2, 4);
+    verify_endpoints(x1, y1, x2, y2, 8);
+
+    x1 = 1000;
+    y1 = 1;
+    x2 = 0;
+    y2 = 1;
+    verify_endpoints(x1, y1, x2, y2, 1);
+    verify_endpoints(x1, y1, x2, y2, 2);
+    verify_endpoints(x1, y1, x2, y2, 4);
+    verify_endpoints(x1, y1, x2, y2, 8);
+
+
+    x1 = 0;
+    y1 = 0;
+    x2 = 100;
+    y2 = 100;
+    verify_endpoints(x1, y1, x2, y2, 1);
+    verify_endpoints(x1, y1, x2, y2, 2);
+    verify_endpoints(x1, y1, x2, y2, 4);
+    verify_endpoints(x1, y1, x2, y2, 8);
+
+    x1 = 100;
+    y1 = 100;
+    x2 = 0;
+    y2 = 0;
+    verify_endpoints(x1, y1, x2, y2, 1);
+    verify_endpoints(x1, y1, x2, y2, 2);
+    verify_endpoints(x1, y1, x2, y2, 4);
+    verify_endpoints(x1, y1, x2, y2, 8);
+
+    for (int i = 0; i < 1000; i++)
+    {
+        for (int square_width = 1; square_width < 64; square_width *= 2)
+        {
+            x1 = rand() % 1024;
+            y1 = rand() % 1024;
+            x2 = rand() % 1024;
+            y2 = rand() % 1024;
+            success = verify_endpoints(x1, y1, x2, y2, square_width);
+        }
+    }
 }
 
 int main(int argc, char* argv[])

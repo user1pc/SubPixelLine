@@ -89,7 +89,7 @@ void LineTraverser_get_point(const LineTraverser *p_traverser, int32_t *out_x, i
     *out_y = p_traverser->y;
 }
 
-void LineTraverser_get_endpoints(int32_t x1, int32_t y1, int32_t x2, int32_t y2, int32_t square_width, bool include_endpoints,
+void LineTraverser_get_endpoints(int32_t x1, int32_t y1, int32_t x2, int32_t y2, int32_t square_width,
     int32_t *out_x1, int32_t *out_y1, int32_t *out_x2, int32_t *out_y2)
 {
     int32_t dx = x2 - x1;
@@ -98,51 +98,37 @@ void LineTraverser_get_endpoints(int32_t x1, int32_t y1, int32_t x2, int32_t y2,
     int32_t endpoint1_y = y1 / square_width;
     int32_t endpoint2_x = x2 / square_width;
     int32_t endpoint2_y = y2 / square_width;
-    if (dx > 0)
-    {
-        if ((x2 % square_width) == 0)
-            endpoint2_x--;
-        if (!include_endpoints)
-        {
-            endpoint2_x--;
-            endpoint1_x++;
-        }
-    }
-    else if (dx < 0)
-    {
-        if ((x1 % square_width) == 0)
-            endpoint1_x--;
-        if (!include_endpoints)
-        {
-            endpoint1_x--;
-            endpoint2_x++;
-        }
-    }
 
-    if (dy > 0)
+    if (dy < 0)
+    {
+        if ((y1 % square_width) == 0)
+        {
+            endpoint1_y--;
+        }
+    }
+    else if (dy > 0)
     {
         if ((y2 % square_width) == 0)
             endpoint2_y--;
-        if (!include_endpoints)
-        {
-            endpoint2_y--;
-            endpoint1_y++;
-        }
     }
-    else if (dy < 0)
+
+    if (dx < 0)
     {
-        if ((y1 % square_width) == 0)
-            endpoint1_y--;
-        if (!include_endpoints)
+        if ((x1 % square_width) == 0)
         {
-            endpoint1_y--;
-            endpoint2_y++;
+            endpoint1_x--;
         }
     }
-    *out_x1 = min(endpoint1_x, endpoint2_x);
-    *out_x1 = max(endpoint1_x, endpoint2_x);
-    *out_y2 = min(endpoint1_y, endpoint2_y);
-    *out_y2 = max(endpoint1_y, endpoint2_y);
+    else if (dx > 0)
+    {
+        if ((x2 % square_width) == 0)
+            endpoint2_x--;
+    }
+
+    *out_x1 = endpoint1_x;
+    *out_y1 = endpoint1_y;
+    *out_x2 = endpoint2_x;
+    *out_y2 = endpoint2_y;
 }
 
 

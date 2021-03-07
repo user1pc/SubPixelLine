@@ -58,8 +58,6 @@ void LineTraverser_next(LineTraverser *p_traverser);
 /// @param x2 is the x coordinate of the ending point of the line.
 /// @param y2 is the y coordinate of the ending point of the line.
 /// @param square_width is the width of a square in the grid being traversed.
-/// @param include_endpoints is set to true if you want to consider the endpoints of the line,
-/// or false to exclude the grid squares on the endpoints.
 /// @param out_x1 is a pointer to write the x coordinate which corresponds to x1 in grid-space coordinates.
 /// @param out_y1 is a pointer to write the y coordinate which corresponds to y1 in grid-space coordinates.
 /// @param out_x2 is a pointer to write the x coordinate which corresponds to x2 in grid-space coordinates.
@@ -67,11 +65,7 @@ void LineTraverser_next(LineTraverser *p_traverser);
 /// @remarks It may seem intuitive that the endpoint grid-coordinates can be obtained by dividing the line
 /// endpoints by square_width, however this is not true. This function will get the correct grid coordinates
 /// that corresponds to the line endpoints.
-/// Usually, you will probably want to set include_endpoints to true. But it can be set to false in case you
-/// don't want to include the endpoints. To exclude the endpoints means to skip exactly one square towards
-/// both ends of the line. So, setting include_endpoints to false will exclude exactly one grid square
-/// on each side of the line.
-void LineTraverser_get_endpoints(int32_t x1, int32_t y1, int32_t x2, int32_t y2, int32_t square_width, bool include_endpoints,
+void LineTraverser_get_endpoints(int32_t x1, int32_t y1, int32_t x2, int32_t y2, int32_t square_width,
     int32_t *out_x1, int32_t *out_y1, int32_t *out_x2, int32_t *out_y2);
 
 /// User defined function which can be called during a line traversal.
