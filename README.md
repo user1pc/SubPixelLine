@@ -159,7 +159,7 @@ Here is a list of all possible pixel-intersections for a line directed in the (+
 Now here is a list of possible lines which will **NOT** intersect the pixel:
 
 <p align="center">
-  <img src="./doc_images/wont_hit_pixel.png" style="width:400px;"/>
+  <img src="./doc_images/wont_hit_pixel__.png" style="width:400px;"/>
 </p>
 
 - A' - If a line obviously doesn't intersect a pixel, the pixel will **NOT** be drawn.
@@ -171,6 +171,7 @@ Now here is a list of possible lines which will **NOT** intersect the pixel:
 - F' - If a line endpoint starts exactly on the top right corner of a pixel going in the (+,+) direction, the pixel will **NOT** be drawn.
 - G' - If a line endpoint starts exactly on the top side of a pixel going in the (+,+) direction, the pixel will **NOT** be drawn.
 - H' - If a line endpoint starts exactly on the right side of a pixel going in the (+,+) direction, the pixel will **NOT** be drawn.
+- I' - If a line exactly *touches* a corner of the pixel, the pixel will **NOT** be drawn. This applies to **all** corners.
 
 Those same rules apply for all the other quadrants as you would expect. There is an annoying problem you may notice for the cases where a point lines on the edge of a pixel.
 <p align="center">
