@@ -32,10 +32,13 @@ Since we want to use only integer math, its easier to think of a pixel as having
   <img src="./doc_images/the_algo_2_.png" style="width:900px;"/>
 </p>
 
-First, you need to find which pixel coordinate (x,y) the starting point (Px,Py) lies in. This is easy:
+First, you need to find which pixel coordinate (x,y) the starting point (Px,Py) lies in. This is easy (for the (+,+) quadrant):
 <p align="left">
   <img src="./doc_images/math1.gif" style="width:130px;"/>
 </p>
+
+
+<sub><sup>For other quadrants, there are some issues, explained below in "Exactly which pixels will be drawn?"<sub><sup>
 
 Now you need the 2 vectors, one is the line you are given (P to Q), and another is the blue line in the images above. The blue vector points towards the (x+1,y+1) pixel. This is what you will use to determine which pixel to go to next. If the red vector (the given line) points to the right of the blue line, go to (x+1,y). If the red vector points to the left of the blue line, go to (x,y+1). If the two vectors overlapped, go diagonally to (x+1,y+1). 
 
