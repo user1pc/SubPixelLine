@@ -245,3 +245,9 @@ This behavior can be easier to understand by dropping the idea that a pixel coor
     }
 
 The new addition is the set of if statements above the while loop. These perform the proper ceiling/flooring of the pixel endpoints. The point still traverses from the endpoint defined by (x1,y1) going towards (x2,y2). There is no swapping depending on the quadrants of the line.
+
+This algorithm has been tested to be recursive, meaning in a line drawn over a grid of 2x2 pixels, and the same line drawn over a grid of 4x4 pixels, the grid of 4x4 pixels will always overlap the grid of 2x2 pixels. There will be no missing or extra pixels depending on the size.
+
+<p align="center">
+  <img src="./doc_images/is_recursive.png" style="width:150px;"/>
+</p>
