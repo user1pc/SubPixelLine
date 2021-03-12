@@ -626,8 +626,10 @@ TEST(manual_tests, LineBounder)
     EXPECT_EQ(x2, 2);
 }
 
+/*
 int main(int argc, char* argv[])
 {
     testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }
+*/

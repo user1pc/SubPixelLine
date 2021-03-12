@@ -3261,102 +3261,141 @@ bool verify_endpoints(int x1, int y1, int x2, int y2, int square_width)
 
 TEST(endpoint_test, DrawLine)
 {
-    int32_t x1, y1, x2, y2, square_width;
-    bool include_endpoints;
+    int32_t x1, y1, x2, y2;
     bool success;
 
     x1 = 0;
     y1 = 0;
     x2 = 0;
     y2 = 100;
-    verify_endpoints(x1, y1, x2, y2, 1);
-    verify_endpoints(x1, y1, x2, y2, 2);
-    verify_endpoints(x1, y1, x2, y2, 4);
-    verify_endpoints(x1, y1, x2, y2, 8);
+    success = verify_endpoints(x1, y1, x2, y2, 1);
+    EXPECT_TRUE(success);
+    success = verify_endpoints(x1, y1, x2, y2, 2);
+    EXPECT_TRUE(success);
+    success = verify_endpoints(x1, y1, x2, y2, 4);
+    EXPECT_TRUE(success);
+    success = verify_endpoints(x1, y1, x2, y2, 8);
+    EXPECT_TRUE(success);
 
     x1 = 0;
     y1 = 100;
     x2 = 0;
     y2 = 0;
-    verify_endpoints(x1, y1, x2, y2, 1);
-    verify_endpoints(x1, y1, x2, y2, 2);
-    verify_endpoints(x1, y1, x2, y2, 4);
-    verify_endpoints(x1, y1, x2, y2, 8);
+    success = verify_endpoints(x1, y1, x2, y2, 1);
+    EXPECT_TRUE(success);
+    success = verify_endpoints(x1, y1, x2, y2, 2);
+    EXPECT_TRUE(success);
+    success = verify_endpoints(x1, y1, x2, y2, 4);
+    EXPECT_TRUE(success);
+    success = verify_endpoints(x1, y1, x2, y2, 8);
+    EXPECT_TRUE(success);
 
     x1 = 0;
     y1 = 0;
     x2 = 100;
     y2 = 0;
-    verify_endpoints(x1, y1, x2, y2, 1);
-    verify_endpoints(x1, y1, x2, y2, 2);
-    verify_endpoints(x1, y1, x2, y2, 4);
-    verify_endpoints(x1, y1, x2, y2, 8);
+    success = verify_endpoints(x1, y1, x2, y2, 1);
+    EXPECT_TRUE(success);
+    success = verify_endpoints(x1, y1, x2, y2, 2);
+    EXPECT_TRUE(success);
+    success = verify_endpoints(x1, y1, x2, y2, 4);
+    EXPECT_TRUE(success);
+    success = verify_endpoints(x1, y1, x2, y2, 8);
+    EXPECT_TRUE(success);
 
     x1 = 1000;
     y1 = 0;
     x2 = 0;
     y2 = 0;
-    verify_endpoints(x1, y1, x2, y2, 1);
-    verify_endpoints(x1, y1, x2, y2, 2);
-    verify_endpoints(x1, y1, x2, y2, 4);
-    verify_endpoints(x1, y1, x2, y2, 8);
+    success = verify_endpoints(x1, y1, x2, y2, 1);
+    EXPECT_TRUE(success);
+    success = verify_endpoints(x1, y1, x2, y2, 2);
+    EXPECT_TRUE(success);
+    success = verify_endpoints(x1, y1, x2, y2, 4);
+    EXPECT_TRUE(success);
+    success = verify_endpoints(x1, y1, x2, y2, 8);
+    EXPECT_TRUE(success);
 
 
     x1 = 1;
     y1 = 0;
     x2 = 1;
     y2 = 100;
-    verify_endpoints(x1, y1, x2, y2, 1);
-    verify_endpoints(x1, y1, x2, y2, 2);
-    verify_endpoints(x1, y1, x2, y2, 4);
-    verify_endpoints(x1, y1, x2, y2, 8);
+    success = verify_endpoints(x1, y1, x2, y2, 1);
+    EXPECT_TRUE(success);
+    success = verify_endpoints(x1, y1, x2, y2, 2);
+    EXPECT_TRUE(success);
+    success = verify_endpoints(x1, y1, x2, y2, 4);
+    EXPECT_TRUE(success);
+    success = verify_endpoints(x1, y1, x2, y2, 8);
+    EXPECT_TRUE(success);
 
     x1 = 1;
     y1 = 100;
     x2 = 1;
     y2 = 0;
-    verify_endpoints(x1, y1, x2, y2, 1);
-    verify_endpoints(x1, y1, x2, y2, 2);
-    verify_endpoints(x1, y1, x2, y2, 4);
-    verify_endpoints(x1, y1, x2, y2, 8);
+    success = verify_endpoints(x1, y1, x2, y2, 1);
+    EXPECT_TRUE(success);
+    success = verify_endpoints(x1, y1, x2, y2, 2);
+    EXPECT_TRUE(success);
+    success = verify_endpoints(x1, y1, x2, y2, 4);
+    EXPECT_TRUE(success);
+    success = verify_endpoints(x1, y1, x2, y2, 8);
+    EXPECT_TRUE(success);
 
 
     x1 = 0;
     y1 = 1;
     x2 = 100;
     y2 = 1;
-    verify_endpoints(x1, y1, x2, y2, 1);
-    verify_endpoints(x1, y1, x2, y2, 2);
-    verify_endpoints(x1, y1, x2, y2, 4);
-    verify_endpoints(x1, y1, x2, y2, 8);
+    success = verify_endpoints(x1, y1, x2, y2, 1);
+    EXPECT_TRUE(success);
+    success = verify_endpoints(x1, y1, x2, y2, 2);
+    EXPECT_TRUE(success);
+    success = verify_endpoints(x1, y1, x2, y2, 4);
+    EXPECT_TRUE(success);
+    success = verify_endpoints(x1, y1, x2, y2, 8);
+    EXPECT_TRUE(success);
 
     x1 = 1000;
     y1 = 1;
     x2 = 0;
     y2 = 1;
-    verify_endpoints(x1, y1, x2, y2, 1);
-    verify_endpoints(x1, y1, x2, y2, 2);
-    verify_endpoints(x1, y1, x2, y2, 4);
-    verify_endpoints(x1, y1, x2, y2, 8);
+    success = verify_endpoints(x1, y1, x2, y2, 1);
+    EXPECT_TRUE(success);
+    success = verify_endpoints(x1, y1, x2, y2, 2);
+    EXPECT_TRUE(success);
+    success = verify_endpoints(x1, y1, x2, y2, 4);
+    EXPECT_TRUE(success);
+    success = verify_endpoints(x1, y1, x2, y2, 8);
+    EXPECT_TRUE(success);
 
 
     x1 = 0;
     y1 = 0;
     x2 = 100;
     y2 = 100;
-    verify_endpoints(x1, y1, x2, y2, 1);
-    verify_endpoints(x1, y1, x2, y2, 2);
-    verify_endpoints(x1, y1, x2, y2, 4);
-    verify_endpoints(x1, y1, x2, y2, 8);
+    success = verify_endpoints(x1, y1, x2, y2, 1);
+    EXPECT_TRUE(success);
+    success = verify_endpoints(x1, y1, x2, y2, 2);
+    EXPECT_TRUE(success);
+    success = verify_endpoints(x1, y1, x2, y2, 4);
+    EXPECT_TRUE(success);
+    success = verify_endpoints(x1, y1, x2, y2, 8);
+    EXPECT_TRUE(success);
 
     x1 = 100;
     y1 = 100;
     x2 = 0;
     y2 = 0;
-    verify_endpoints(x1, y1, x2, y2, 1);
-    verify_endpoints(x1, y1, x2, y2, 2);
-    verify_endpoints(x1, y1, x2, y2, 4);
-    verify_endpoints(x1, y1, x2, y2, 8);
+    success = verify_endpoints(x1, y1, x2, y2, 1);
+    EXPECT_TRUE(success);
+    success = verify_endpoints(x1, y1, x2, y2, 2);
+    EXPECT_TRUE(success);
+    success = verify_endpoints(x1, y1, x2, y2, 4);
+    EXPECT_TRUE(success);
+    success = verify_endpoints(x1, y1, x2, y2, 8);
+    EXPECT_TRUE(success);
 
     for (int i = 0; i < 1000; i++)
     {
@@ -3367,6 +3406,7 @@ TEST(endpoint_test, DrawLine)
             x2 = rand() % 1024;
             y2 = rand() % 1024;
             success = verify_endpoints(x1, y1, x2, y2, square_width);
+            EXPECT_TRUE(success);
         }
     }
 }
