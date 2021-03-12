@@ -15,37 +15,11 @@
 bool line_bounded_fract_less(int32_t a_numerator, int32_t a_denominator, 
     int32_t b_numerator, int32_t b_denominator)
 {
-    if (a_denominator == 0)
-    {
-        return a_numerator < 0;
-    }
-    else if (b_denominator == 0)
-    {
-        return b_numerator >= 0;
-    }
-    return ((double)a_numerator / (double)a_denominator) < ((double)b_numerator / (double)b_denominator);
-    int32_t a_sign = a_numerator;
-    int32_t b_sign = b_numerator;
-    if ((a_sign ^ b_sign) < 0)
-        return a_sign < 0;
     return ((int64_t)a_numerator * b_denominator) < ((int64_t)b_numerator * a_denominator);
 }
 bool line_bounded_fract_greater(int32_t a_numerator, int32_t a_denominator, 
     int32_t b_numerator, int32_t b_denominator)
 {
-    if (a_denominator == 0)
-    {
-        return a_numerator >= 0;
-    }
-    else if (b_denominator == 0)
-    {
-        return b_numerator < 0;
-    }
-    return ((double)a_numerator / (double)a_denominator) > ((double)b_numerator / (double)b_denominator);
-    int32_t a_sign = a_numerator;
-    int32_t b_sign = b_numerator;
-    if ((a_sign ^ b_sign) < 0)
-        return a_sign >= 0;
     return ((int64_t)a_numerator * b_denominator) > ((int64_t)b_numerator * a_denominator);
 }
 

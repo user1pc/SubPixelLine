@@ -20,6 +20,7 @@
 /// @param out_y1 is a pointer to the new y1 coordinate after bounding.
 /// @param out_x2 is a pointer to the new x2 coordinate after bounding.
 /// @param out_y2 is a pointer to the new y2 coordinate after bounding.
+/// @returns true if the line segment returned is inside the region, false otherwise.
 bool line_bound_inside_rect(int32_t x1, int32_t y1, int32_t x2, int32_t y2,
     int32_t bounds_min_x, int32_t bounds_min_y, int32_t bounds_max_x, int32_t bounds_max_y,
     int32_t *out_x1, int32_t *out_y1, int32_t *out_x2, int32_t *out_y2);
