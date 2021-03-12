@@ -136,7 +136,7 @@ bool line_bound_inside_rect(int32_t x1, int32_t y1, int32_t x2, int32_t y2,
     *out_y1 = y1;
     *out_x2 = x2;
     *out_y2 = y2;
-    if ((t_near_numerator ^ t_near_denominator) > 0)
+    if ((t_near_numerator ^ t_near_denominator) >= 0)
     {
         if (t_near_denominator != 0)
         {
@@ -155,5 +155,61 @@ bool line_bound_inside_rect(int32_t x1, int32_t y1, int32_t x2, int32_t y2,
     bool hit = line_bounded_fract_less(t_near_numerator, t_near_denominator, t_far_numerator, t_far_denominator);
     hit &= t_near_numerator < t_near_denominator;
     hit &= t_far_numerator > 0;
+    return hit;
+}
+
+
+bool line_extend_inside_rect(int32_t x1, int32_t y1, int32_t x2, int32_t y2,
+    int32_t bounds_min_x, int32_t bounds_min_y, int32_t bounds_max_x, int32_t bounds_max_y,
+    int32_t *out_x1, int32_t *out_y1, int32_t *out_x2, int32_t *out_y2)
+{
+    int32_t dx = x2 - x1;
+    int32_t dy = y2 - y1;
+    if (dx == 0)
+    {
+        *out_x1 = x1;
+        *out_x2 = x2;
+        *out_y1 = bounds_min_y;
+        *out_y2 = bounds_max_y;
+        bool x_in_bounds = x1 >= bounds_min_x && x1 <= bounds_max_x;
+        return x_in_bounds;
+    }
+    if (dy == 0)
+    {
+        *out_y1 = y1;
+        *out_y2 = y2;
+        *out_x1 = bounds_min_x;
+        *out_x2 = bounds_max_x;
+        bool y_in_bounds = y1 >= bounds_min_y && y1 <= bounds_max_y;
+        return y_in_bounds;
+    }
+    int32_t t_near_numerator, t_near_denominator;
+    int32_t t_far_numerator, t_far_denominator;
+    line_rectangle_intersection_near(x1, y1, x2, y2, bounds_min_x, bounds_max_x, bounds_min_y, bounds_max_y,
+        &t_near_numerator, &t_near_denominator);
+    line_rectangle_intersection_far(x1, y1, x2, y2, bounds_min_x, bounds_max_x, bounds_min_y, bounds_max_y,
+        &t_far_numerator, &t_far_denominator);
+    
+    *out_x1 = x1;
+    *out_y1 = y1;
+    *out_x2 = x2;
+    *out_y2 = y2;
+    if (true)
+    {
+        if (t_near_denominator != 0)
+        {
+            *out_x1 = (x1 * t_near_denominator + t_near_numerator * dx)  / t_near_denominator;
+            *out_y1 = (y1 * t_near_denominator + t_near_numerator * dy)  / t_near_denominator;
+        }
+    }
+    if (true)
+    {
+        if (t_far_denominator != 0)
+        {
+            *out_x2 = (x1 * t_far_denominator + t_far_numerator * dx)  / t_far_denominator;
+            *out_y2 = (y1 * t_far_denominator + t_far_numerator * dy)  / t_far_denominator;
+        }
+    }
+    bool hit = line_bounded_fract_less(t_near_numerator, t_near_denominator, t_far_numerator, t_far_denominator);
     return hit;
 }

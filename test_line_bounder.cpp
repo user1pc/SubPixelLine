@@ -58,14 +58,48 @@ bool test_line_bounder_correct(double x1, double y1, double x2, double y2,
     return t_near < t_far && t_near < 1.0 && t_far > 0.0;
 }
 
+bool test_line_expander_correct(double x1, double y1, double x2, double y2,
+    double x_min, double x_max, double y_min, double y_max,
+    double *out_t1, double *out_t2)
+{
+    double dx = x2 - x1;
+    double dy = y2 - y1;
+    double t1x = (((dx >= 0) ? x_min : x_max) - x1) / dx;
+    double t1y = (((dy >= 0) ? y_min : y_max) - y1) / dy;
+    double t2x = (((dx >= 0) ? x_max : x_min) - x1) / dx;
+    double t2y = (((dy >= 0) ? y_max : y_min) - y1) / dy;
+    double t_near, t_far;
+
+    if (fabs(dx) < 0.00001)
+    {
+        t_near = t1y;
+        t_far = t2y;
+        *out_t1 = t_near;
+        *out_t2 = t_far;
+        return x1 >= x_min && x1 <= x_max;
+    }
+    else if (fabs(dy) < 0.00001)
+    {
+        t_near = t1x;
+        t_far = t2x;
+        *out_t1 = t_near;
+        *out_t2 = t_far;
+        return y1 >= y_min && y1 <= y_max;
+    }
+    else
+    {
+        t_near = max(t1x, t1y);
+        t_far = min(t2x, t2y);
+    }
+    *out_t1 = t_near;
+    *out_t2 = t_far;
+    return t_near < t_far;
+}
+
 bool test_line_bounder_verify(int32_t x1, int32_t y1, int32_t x2, int32_t y2,
     int32_t x_min, int32_t x_max, int32_t y_min, int32_t y_max)
 {
     int32_t test_x1, test_y1, test_x2, test_y2;
-    if (x1 == 271 && y1 == 491 && x2 == 638 && y2 == 223)
-    {
-        int g = 0;
-    }
     bool test_hit = line_bound_inside_rect(x1, y1, x2, y2, x_min, y_min, x_max, y_max,
         &test_x1, &test_y1, &test_x2, &test_y2);
     
@@ -93,6 +127,78 @@ bool test_line_bounder_verify(int32_t x1, int32_t y1, int32_t x2, int32_t y2,
     return true;
 }
 
+bool test_line_expander_verify(int32_t x1, int32_t y1, int32_t x2, int32_t y2,
+    int32_t x_min, int32_t x_max, int32_t y_min, int32_t y_max)
+{
+    int32_t test_x1, test_y1, test_x2, test_y2;
+    bool test_hit = line_extend_inside_rect(x1, y1, x2, y2, x_min, y_min, x_max, y_max,
+        &test_x1, &test_y1, &test_x2, &test_y2);
+    
+    double t1, t2;
+    bool correct_hit = test_line_expander_correct(x1, y1, x2, y2, x_min, x_max, y_min, y_max, &t1, &t2);
+    if (test_hit != correct_hit)
+        return false;
+    double dx = (double)(x2 - x1);
+    double dy = (double)(y2 - y1);
+    int32_t correct_x1 = (int32_t)(x1 + dx * t1);
+    int32_t correct_y1 = (int32_t)(y1 + dy * t1);
+    int32_t correct_x2 = (int32_t)(x1 + dx * t2);
+    int32_t correct_y2 = (int32_t)(y1 + dy * t2);
+    if (fabsf(dx) < 0.00001)
+    {
+        if (dy < 0)
+        {
+            int32_t temp = correct_y1;
+            correct_y1 = correct_y2;
+            correct_y2 = temp;
+        }
+    }
+    if (fabsf(dy) < 0.00001)
+    {
+        if (dx < 0)
+        {
+            int32_t temp = correct_x1;
+            correct_x1 = correct_x2;
+            correct_x2 = temp;
+        }
+    }
+    if (correct_hit)
+    {
+        if (abs(test_x1 - correct_x1) >= 3)
+            return false;
+        if (abs(test_y1 - correct_y1) >= 3)
+            return false;
+        if (abs(test_x2 - correct_x2) >= 3)
+            return false;
+        if (abs(test_y2 - correct_y2) >= 3)
+            return false;
+    }
+    return true;
+}
+
+TEST(auto_tests, LineExpander)
+{
+    srand(0);
+    for (int i = 0; i < 100000000; i++)
+    {
+        int32_t x1 = rand() % 1024;
+        int32_t y1 = rand() % 1024;
+        int32_t x2 = rand() % 1024;
+        int32_t y2 = rand() % 1024;
+
+        if (x1 == x2 && y1 == y2)
+            continue;
+
+        int32_t x_min = rand() % 1022;
+        int32_t y_min = rand() % 1022;
+        int32_t x_max = x_min + (rand() % (1024 - x_min)) + 1;
+        int32_t y_max = y_min + (rand() % (1024 - y_min)) + 1;
+        bool success = test_line_expander_verify(x1, y1, x2, y2, x_min, x_max, y_min, y_max);
+        EXPECT_TRUE(success);
+    }
+}
+
+
 TEST(auto_tests, LineBounder)
 {
     srand(0);
@@ -110,7 +216,8 @@ TEST(auto_tests, LineBounder)
         int32_t y_min = rand() % 1022;
         int32_t x_max = x_min + (rand() % (1024 - x_min)) + 1;
         int32_t y_max = y_min + (rand() % (1024 - y_min)) + 1;
-        test_line_bounder_verify(x1, y1, x2, y2, x_min, x_max, y_min, y_max);
+        bool success = test_line_bounder_verify(x1, y1, x2, y2, x_min, x_max, y_min, y_max);
+        EXPECT_TRUE(success);
     }
 }
 
