@@ -144,10 +144,7 @@ bool line_bound_inside_rect(int32_t x1, int32_t y1, int32_t x2, int32_t y2,
             *out_y1 = (y1 * t_near_denominator + t_near_numerator * dy)  / t_near_denominator;
         }
     }
-    bool far_is_less = t_far_numerator < t_far_denominator;
-    if ((t_far_numerator & t_far_denominator) < 0)
-        far_is_less = !far_is_less;
-    if (far_is_less)
+    if (t_far_numerator < t_far_denominator)
     {
         if (t_far_denominator != 0)
         {
